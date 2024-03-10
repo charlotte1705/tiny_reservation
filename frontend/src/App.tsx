@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Layout from "./layouts/Layout";
-
+import Register from "./pages/Register";
 const App = () => {
  return (
   <Router>
@@ -27,6 +27,15 @@ const App = () => {
             </Layout>
             // <> Search Page </>        
              }
+        />
+        <Route
+          path="/register"
+          element={
+            <Layout>
+               <p> Register Page </p> 
+              <Register />
+            </Layout>
+          }
         />
         <Route
           path="*"
