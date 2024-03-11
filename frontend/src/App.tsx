@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Register from "./pages/Register";
+import SignIn from "./pages/SignIn";
 const App = () => {
  return (
   <Router>
@@ -34,6 +35,15 @@ const App = () => {
             <Layout>
                <p> Register Page </p> 
               <Register />
+            </Layout>
+          }
+        />
+             <Route
+          path="/sign-in"
+          element={
+            <Layout>
+               <p> Login Page </p> 
+              <SignIn />
             </Layout>
           }
         />
