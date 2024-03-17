@@ -6,6 +6,16 @@ import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import {v2 as cloudinary} from "cloudinary";
+import path from "path";
+import myHotelRoutes from "./routes/my-hotels";
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string);
 
@@ -27,7 +37,7 @@ app.get("/api/test", (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-// app.use("/api/my-hotels", myHotelRoutes);
+app.use("/api/my-hotels", myHotelRoutes);
 // app.use("/api/hotels", hotelRoutes);
 // app.use("/api/my-bookings", bookingRoutes);
 

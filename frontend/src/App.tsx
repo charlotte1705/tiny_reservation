@@ -1,21 +1,21 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
+import AddHotel from "./pages/AddHotel"; // Import AddHotel component
+import MyHotels from "./pages/MyHotels"; // Import MyHotels component
+import { useAppContext } from "./contexts/AppContext";
+
 const App = () => {
- return (
-  <Router>
+  const { isLoggedIn } = useAppContext();
+  return (
+    <Router>
       <Routes>
         <Route
           path="/"
           element={
             <Layout>
-             <p>Home Page</p>
+          <p>Welcome to HomePage</p>
             </Layout>
           }
         />
@@ -23,37 +23,52 @@ const App = () => {
           path="/search"
           element={
             <Layout>
-              {/* <Search /> */}
-              <p> Search Page </p>  
+            <p>Search</p>
             </Layout>
-            // <> Search Page </>        
-             }
+          }
         />
+
         <Route
           path="/register"
           element={
             <Layout>
-               <p> Register Page </p> 
               <Register />
             </Layout>
           }
         />
-             <Route
+        <Route
           path="/sign-in"
           element={
             <Layout>
-               <p> Login Page </p> 
               <SignIn />
             </Layout>
           }
         />
-        <Route
-          path="*"
-          element={<Navigate to="/" />}
-        />
+
+        {isLoggedIn && (
+          <>
+            <Route
+              path="/add-hotel"
+              element={
+                <Layout>
+                  <AddHotel />
+                </Layout>
+              }
+            />
+            <Route
+              path="/my-hotels"
+              element={
+                <Layout>
+                  <MyHotels />
+                </Layout>
+              }
+            />
+          </>
+        )}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
-}
+};
 
-export default App
+export default App;
