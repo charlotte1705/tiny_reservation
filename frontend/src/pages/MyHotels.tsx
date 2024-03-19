@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import * as apiClient from "../api/api-client";
-// import { BsBuilding, BsMap } from "react-icons/bs";
-// import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
+import { BsBuilding, BsMap } from "react-icons/bs";
+import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 
 const MyHotels = () => {
   const { data: hotelData } = useQuery(
@@ -33,6 +33,7 @@ const MyHotels = () => {
           <div
             data-testid="hotel-card"
             className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5"
+            key={hotel._id}
           >
             <h2 className="text-2xl font-bold">{hotel.name}</h2>
             <div className="whitespace-pre-line">{hotel.description}</div>
@@ -59,7 +60,7 @@ const MyHotels = () => {
             </div>
             <span className="flex justify-end">
               <Link
-                to={`/edit-hotel/${hotel._id}`}
+                to={`/update-hotel/${hotel._id}`}
                 className="flex bg-blue-600 text-white text-xl font-bold p-2 hover:bg-blue-500"
               >
                 View Details

@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import AddHotel from "./pages/AddHotel"; // Import AddHotel component
 import MyHotels from "./pages/MyHotels"; // Import MyHotels component
+import UpdateHotel from "./pages/UpdateHotel"; // Import UpdateHotel component
 import { useAppContext } from "./contexts/AppContext";
 
 const App = () => {
@@ -52,6 +53,14 @@ const App = () => {
               element={
                 <Layout>
                   <AddHotel />
+                </Layout>
+              }
+            />
+            <Route
+              path="/update-hotel/:hotelId"
+              element={
+                <Layout>
+                  <UpdateHotel />
                 </Layout>
               }
             />
