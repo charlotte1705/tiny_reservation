@@ -5,6 +5,7 @@ import SignIn from "./pages/SignIn";
 import AddHotel from "./pages/AddHotel"; // Import AddHotel component
 import MyHotels from "./pages/MyHotels"; // Import MyHotels component
 import UpdateHotel from "./pages/UpdateHotel"; // Import UpdateHotel component
+import Search from "./pages/Search"; // Import Search component
 import { useAppContext } from "./contexts/AppContext";
 
 const App = () => {
@@ -24,7 +25,7 @@ const App = () => {
           path="/search"
           element={
             <Layout>
-            <p>Search</p>
+            <Search />
             </Layout>
           }
         />
