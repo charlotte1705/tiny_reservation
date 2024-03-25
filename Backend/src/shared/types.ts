@@ -4,8 +4,13 @@ export type UserType = {
     password: string;
     firstName: string;
     lastName: string;
+    // role: string;
   };
-  
+  export type AdminType = {
+    _id: string;
+    email: string;
+    password: string;
+  };
   export type HotelType = {
     _id: string;
     userId: string;
@@ -45,3 +50,9 @@ export type UserType = {
       pages: number;
     }
   }
+
+  export type PaymentIntentResponse = {
+    paymentIntentId: string;
+    clientSecret: string;
+    totalCost: number;
+  };

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
 import Hotel from "../models/hotel";
+import User from "../models/user";
 import verifyToken from "../middleware/auth";
 import { body } from "express-validator";
 import { HotelType } from "../shared/types";
@@ -47,6 +48,9 @@ router.post(
         newHotel.userId = req.userId;
         // save the new hotel in the database
         const hotel = new Hotel(newHotel);
+        User.updateOne({id: req.userId}, {
+          $set: { role: "owner" }
+        })
         await hotel.save();
         // return 201 status
         res.status(201).send(hotel);

@@ -6,6 +6,8 @@ import AddHotel from "./pages/AddHotel"; // Import AddHotel component
 import MyHotels from "./pages/MyHotels"; // Import MyHotels component
 import UpdateHotel from "./pages/UpdateHotel"; // Import UpdateHotel component
 import Search from "./pages/Search"; // Import Search component
+import Detail from "./pages/Detail"; // Import Detail component
+import Booking from "./pages/Booking"; // Import Booking component
 import { useAppContext } from "./contexts/AppContext";
 
 const App = () => {
@@ -38,6 +40,15 @@ const App = () => {
             </Layout>
           }
         />
+
+        <Route
+          path="/detail/:hotelId"
+          element={
+            <Layout>
+              <Detail />
+            </Layout>
+          }
+        />
         <Route
           path="/sign-in"
           element={
@@ -49,6 +60,15 @@ const App = () => {
 
         {isLoggedIn && (
           <>
+
+            <Route
+              path="/hotel/:hotelId/booking"
+              element={
+                <Layout>
+                  <Booking />
+                </Layout>
+              }
+            />
             <Route
               path="/add-hotel"
               element={
