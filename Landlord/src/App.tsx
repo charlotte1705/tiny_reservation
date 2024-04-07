@@ -8,7 +8,6 @@ import UpdateHotel from "./pages/UpdateHotel"; // Import UpdateHotel component
 import Search from "./pages/Search"; // Import Search component
 import Detail from "./pages/Detail"; // Import Detail component
 import Booking from "./pages/Booking"; // Import Booking component
-import Home from "./pages/Home";
 import { useAppContext } from "./contexts/AppContext";
 
 const App = () => {
@@ -20,7 +19,7 @@ const App = () => {
           path="/"
           element={
             <Layout>
-              <Home/>
+          <p>Welcome to HomePage</p>
             </Layout>
           }
         />

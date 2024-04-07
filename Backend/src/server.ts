@@ -4,6 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
+import dashboardRoutes from "./routes/dashboard";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import {v2 as cloudinary} from "cloudinary";
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://localhost:3000','http://localhost:5174'],
     credentials: true,
   })
 );
@@ -40,6 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/my-hotels", myHotelRoutes);
 app.use("/api/hotels", hotelRoutes);
+app.use("/dashboard", dashboardRoutes)
 // app.use("/api/my-bookings", bookingRoutes);
 
 app.get("*", (req: Request, res: Response) => {

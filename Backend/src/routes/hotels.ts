@@ -30,8 +30,9 @@ router.get("/search", async (req: Request, res: Response) => {
     const pageNumber = parseInt(
       req.query.page ? req.query.page.toString() : "1"
     );
+    query.status = "approve";
     const skip = (pageNumber - 1) * pageSize;
-
+    
     const hotels = await Hotel.find(query)
       .sort(sortOptions)
       .skip(skip)
@@ -113,10 +114,11 @@ router.post(
     if (!paymentIntent.client_secret) {
       return res.status(500).json({ message: "Error creating payment intent" });
     }
-
+    const scr = paymentIntent.client_secret.toString();
+    console.log(scr);
     const response = {
       paymentIntentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret.toString(),
+      clientSecret: scr,
       totalCost,
     };
 

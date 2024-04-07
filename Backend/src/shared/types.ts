@@ -11,6 +11,10 @@ export type UserType = {
     email: string;
     password: string;
   };
+  export type EmergencyType = {
+    _id: string;
+    isEmergency: boolean;
+  };
   export type HotelType = {
     _id: string;
     userId: string;
@@ -26,6 +30,8 @@ export type UserType = {
     starRating: number;
     imageUrls: string[];
     lastUpdated: Date;
+    emergency: boolean;
+    status: string;
     bookings: BookingType[];
   };
 

@@ -26,8 +26,3 @@ export const hotelTypes = [
     "Spa",
     "Fitness Center",
   ];
-
-  export const hotelEmergency = [
-    "Yes",
-    "No",
-  ]

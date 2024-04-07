@@ -26,6 +26,7 @@ router.post(
       body("country").notEmpty().withMessage("Country is required"),
       body("description").notEmpty().withMessage("Description is required"),
       body("type").notEmpty().withMessage("Hotel type is required"),
+      body("emergency").notEmpty().withMessage("Emergency is required"),
       body("pricePerNight")
         .notEmpty()
         .isNumeric()
@@ -39,6 +40,8 @@ router.post(
     async (req: Request, res: Response) => {
       try {
         const imageFiles = req.files as Express.Multer.File[];
+        req.body.emergency = req.body.emergency === "Yes"? "true": "false";
+        req.body.status = "pending";
         const newHotel: HotelType = req.body;
          // Upload the images to cloudinary
         const imageUrls = await uploadImages(imageFiles);
