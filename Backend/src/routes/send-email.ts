@@ -1,88 +1,64 @@
-const {google}= require('googleapis');
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-require('dotenv').config();
+const User = require("./models/user"); // Import your user model
 
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = process.env.REDIRECT_URI
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN
+async function main() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://tiny01:tiny02@tiny01.afppr0j.mongodb.net/?retryWrites=true&w=majority", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
+    // Fetch all unverified users
+    const unverifiedUsers = await User.find({ verified: false });
 
-const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-oAuth2Client.setCredentials({refresh_token: REFRESH_TOKEN});
+    // Iterate over unverified users and send verification email
+    for (const user of unverifiedUsers) {
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: "santanguyen462@gmail.com",
+          pass: "sdmw wjch nxlj rtul",
+        },
+      });
 
-const sendMail = async() => {
-    try {
-        const accessToken = await oAuth2Client.getAccessToken();
-        let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-              type: "OAuth2",
-              user: 'santanguyen462@gmail.com',
-                clientId: CLIENT_ID,
-                clientSecret: CLIENT_SECRET,
-                refreshToken: REFRESH_TOKEN,
-            },
-          });
-          
-          transporter.set("oauth2_provision_cb", (user, renew, callback) => {
-            let accessToken = accessToken;
-            if (!accessToken) {
-              return callback(new Error("Unknown user"));
-            } else {
-              return callback(null, accessToken);
-            }
-          });
-          
-          transporter.sendMail({
-            from: "sender@example.com",
-            to: "recipient@example.com",
-            subject: "Message",
-            text: "I hope this message gets through!",
-            auth: {
-              user: "user@example.com",
-            },
-          });
-          return;
+      // Generate verification token (you can use a library like `crypto` to generate random tokens)
+      const verificationToken = generateVerificationToken();
 
-        // const accessToken = await oAuth2Client.getAccessToken();
-        const user = 'santanguyen462@gmail.com';
-        const transport = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                type: 'OAuth2',
-                user: user,
-                clientId: CLIENT_ID,
-                clientSecret: CLIENT_SECRET,
-                refreshToken: REFRESH_TOKEN,
-                accessToken: accessToken
-            }
-        });
-          transport.set("oauth2_provision_cb", (user, renew, callback) => {
-            let accessToken = userTokens[user];
-            if (!accessToken) {
-              return callback(new Error("Unknown user"));
-            } else {
-              return callback(null, accessToken);
-            }
-          });
-        // send email with defined transport object
-        let info = await transport.sendMail({
-            from: '"Tinyne" <santanguyen462@gmail.com>', // sender address
-            to: "charlottenguyen1705@gmail.com", // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>", // html body
-        });
-     console.log(info);
-    } catch (error) {
-        console.error(error);
+      // Save verification token to user document
+      user.verificationToken = verificationToken;
+      await user.save();
+
+      // Send verification email
+      const info = await transporter.sendMail({
+        from: '"Sale off Tran Hotel" <santanguyen462@gmail.com>',
+        to: user.email,
+        subject: "Account Verification",
+        html: `
+          <h1>Welcome to Tran Hotel</h1>
+          <p>Please click the following link to verify your account:</p>
+          <a href="http://yourdomain.com/verify?token=${verificationToken}">Verify Account</a>
+        `,
+      });
+
+      console.log(info.messageId);
+      console.log(info.accepted);
+      console.log(info.rejected);
     }
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    await mongoose.disconnect();
+  }
 }
 
+// Function to generate verification token
+function generateVerificationToken() {
+  // Implement your token generation logic here
+}
 
-sendMail();
+main().catch((err) => console.log(err));

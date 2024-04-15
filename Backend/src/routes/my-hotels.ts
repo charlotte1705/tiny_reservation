@@ -95,7 +95,7 @@ router.post(
       try {
         const updatedHotel: HotelType = req.body;
         updatedHotel.lastUpdated = new Date();
-  
+        
         const hotel = await Hotel.findOneAndUpdate(
           {
             _id: req.params.hotelId,

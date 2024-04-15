@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 const router = express.Router();
 
 router.get("/search", async (req: Request, res: Response) => {
-  try {
+  try { 
     const query = constructSearchQuery(req.query);
 
     let sortOptions = {};
@@ -58,7 +58,7 @@ router.get("/search", async (req: Request, res: Response) => {
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const hotels = await Hotel.find().sort("-lastUpdated");
+    const hotels = await Hotel.find({status : "approve"}).sort("-lastUpdated");
     res.json(hotels);
   } catch (error) {
     console.log("error", error);

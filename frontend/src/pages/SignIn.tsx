@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/signin_api";
 import { useAppContext } from "../contexts/AppContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLoginResponse } from '@react-oauth/google';
 
 export type SignInFormData = {
   email: string;
@@ -36,6 +38,24 @@ const SignIn = () => {
   const onSubmit = handleSubmit((data) => {
     mutation.mutate(data);
   });
+
+
+
+  const handleGoogleLoginSuccess = async (credentialResponse: GoogleLoginResponse) => {
+    try {
+      // Call the signInWithGoogle API function passing the Google ID token
+      console.log("🚀 ~ handleGoogleLoginSuccess ~ credentialResponse:", credentialResponse)
+      await apiClient.signInWithGoogle(credentialResponse.tokenId);
+      // Handle successful login as required (e.g., redirect user)
+      showToast({ message: "Google login Successful!", type: "SUCCESS" });
+      await queryClient.invalidateQueries("validateToken");
+      navigate(location.state?.from?.pathname || "/");
+    } catch (error) {
+      // Handle any error occurred during Google login
+      showToast({ message: error.message, type: "ERROR" });
+    }
+      
+  };
 
   return (
     <form className="flex flex-col gap-5" onSubmit={onSubmit}>
@@ -82,6 +102,13 @@ const SignIn = () => {
           Login
         </button>
       </span>
+       {/* Google Login Button */}
+       <GoogleLogin
+        onSuccess={handleGoogleLoginSuccess}
+        onError={() => {
+          console.log('Google Login Failed');
+        }}
+      />
     </form>
   );
 };

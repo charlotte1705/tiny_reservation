@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import * as apiClient from "../api/api-client";
 import LatestDestinationCard from "../components/LatestDestinationCard";
 import TalkJSChat from "../components/TalkJSChat";
+// import { useAppContext } from "../contexts/AppContext";
 
 const Home = () => {
   const { data: hotels } = useQuery("fetchQuery", () =>

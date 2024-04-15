@@ -6,6 +6,9 @@ import { check, validationResult } from "express-validator";
 import verifyToken from "../middleware/auth";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import sendEmail from "../routes/send-emails";
+
+
 const router = express.Router();
 
 
@@ -104,6 +107,11 @@ router.put("/profile/:profile_id", async (req: Request, res: Response) => {
 
 router.delete("/profile/:profile_id", async (req: Request, res: Response) => {
   try {
+    const hotels = await Hotel.find({ userId: req.params.profile_id });
+    if (hotels.length > 0) {
+      // delete all hotels of user
+      await Hotel.deleteMany({ userId: req.params.profile_id });
+    }
     await User.findByIdAndDelete(req.params.profile_id)
     res.json({"message": "delete success"});
   } catch (error) {
@@ -216,6 +224,17 @@ router.put("/emergency", async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });
+  }
+});
+
+router.post("/email", async (req: Request, res: Response) => {
+  try {
+    // await sendEmail(); // Call the sendEmail function from your script
+    const response = await sendEmail();
+    res.status(200).json({ message: "Emails sent successfully" });
+  } catch (error) {
+    console.error("Error sending emails:", error);
+    res.status(500).json({ message: "Failed to send emails" });
   }
 });
 

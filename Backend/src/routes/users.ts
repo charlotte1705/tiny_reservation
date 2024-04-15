@@ -40,17 +40,18 @@ router.post(
     }
 
     try {
-      let user = await User.findOne({
+      let checkUserValid = await User.findOne({
         email: req.body.email,
       });
 
-      if (user) {
+      if (checkUserValid) {
         return res.status(400).json({ message: "User already exists" });
       }
-
-      user = new User(req.body);
+      req.body.role = "user";
+      const user = new User(req.body);
+      
       await user.save();
-
+     
       const token = jwt.sign(
         { userId: user.id },
         process.env.JWT_SECRET_KEY as string,
@@ -67,7 +68,7 @@ router.post(
       return res.status(200).send({ message: "User registered OK" });
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: "Something went wrong" });
+      res.status(500).send({ message: "Something went wrong with register" });
     }
   }
 );

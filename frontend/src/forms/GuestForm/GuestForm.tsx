@@ -18,7 +18,7 @@ type GuestFormData = {
 
 const GuestForm = ({ hotelId, pricePerNight }: Props) => {
   const search = useSearchContext();
-  const { isLoggedIn } = useAppContext();
+  const { isLoggedIn, role, showToast } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -56,6 +56,7 @@ const GuestForm = ({ hotelId, pricePerNight }: Props) => {
   };
 
   const onSubmit = (data: GuestFormData) => {
+    if(role === 'user') {
     search.saveSearchValues(
       "",
       data.checkIn,
@@ -64,6 +65,10 @@ const GuestForm = ({ hotelId, pricePerNight }: Props) => {
       data.childCount
     );
     navigate(`/hotel/${hotelId}/booking`);
+  }
+  else {
+    showToast({ message: "Do not have permission", type: "ERROR" });
+  }
   };
 
   return (
@@ -145,6 +150,7 @@ const GuestForm = ({ hotelId, pricePerNight }: Props) => {
             <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
               Book Now
             </button>
+            
           ) : (
             <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
               Sign in to Book

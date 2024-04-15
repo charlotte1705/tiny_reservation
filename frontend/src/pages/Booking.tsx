@@ -33,7 +33,7 @@ const Booking = () => {
         numberOfNights.toString()
       ),
     {
-      enabled: !!hotelId && numberOfNights > 0,
+      enabled: !!hotelId && numberOfNights > 0 ,
     }
   );
 
@@ -53,6 +53,14 @@ const Booking = () => {
   if (!hotel) {
     return <></>;
   }
+
+    // // Check if the currentUser is the owner of the hotel
+    // const isCurrentUserOwner = currentUser && hotel.userId === currentUser.id;
+
+    // // Prevent the user from paying for their own room
+    // if (isCurrentUserOwner) {
+    //   return <div>You cannot pay for your own room.</div>;
+    // }
 
   return (
     <div className="grid md:grid-cols-[1fr_2fr]">
