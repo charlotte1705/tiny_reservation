@@ -1,3 +1,4 @@
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "../api/register_api";
@@ -11,6 +12,7 @@ export type RegisterFormData = {
   email: string;
   password: string;
   confirmPassword: string;
+  role: "user" | "landlord";
 };
 
 const Register = () => {
@@ -49,7 +51,7 @@ const Register = () => {
           <input
             className="border rounded w-full py-1 px-2 font-normal"
             {...register("firstName", { required: "This field is required" })}
-          ></input>
+          />
           {errors.firstName && (
             <span className="text-red-500">{errors.firstName.message}</span>
           )}
@@ -59,7 +61,7 @@ const Register = () => {
           <input
             className="border rounded w-full py-1 px-2 font-normal"
             {...register("lastName", { required: "This field is required" })}
-          ></input>
+          />
           {errors.lastName && (
             <span className="text-red-500">{errors.lastName.message}</span>
           )}
@@ -71,7 +73,7 @@ const Register = () => {
           type="email"
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("email", { required: "This field is required" })}
-        ></input>
+        />
         {errors.email && (
           <span className="text-red-500">{errors.email.message}</span>
         )}
@@ -88,7 +90,7 @@ const Register = () => {
               message: "Password must be at least 6 characters",
             },
           })}
-        ></input>
+        />
         {errors.password && (
           <span className="text-red-500">{errors.password.message}</span>
         )}
@@ -103,19 +105,38 @@ const Register = () => {
               if (!val) {
                 return "This field is required";
               } else if (watch("password") !== val) {
-                return "Your passwords do no match";
+                return "Your passwords do not match";
               }
             },
           })}
-        ></input>
+        />
         {errors.confirmPassword && (
           <span className="text-red-500">{errors.confirmPassword.message}</span>
         )}
       </label>
+      <h3 className="text-lg font-semibold text-center">
+        Please choose your role
+      </h3>
+      <div className="flex justify-center gap-3">
+        <button
+          className={`bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 hover:text-white text-xl rounded`}
+          onClick={() => {}}
+          type="button"
+        >
+          Customer
+        </button>
+        <button
+          className={`bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 hover:text-white text-xl rounded`}
+          onClick={() => {}}
+          type="button"
+        >
+          Landlord
+        </button>
+      </div>
       <span>
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl rounded"
         >
           Create Account
         </button>

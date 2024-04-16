@@ -1,10 +1,11 @@
+import React from "react";
 import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLoginResponse } from "@react-oauth/google";
+import { useAppContext } from "../contexts/AppContext";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/signin_api";
-import { useAppContext } from "../contexts/AppContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GoogleLogin } from '@react-oauth/google';
-import { GoogleLoginResponse } from '@react-oauth/google';
 
 export type SignInFormData = {
   email: string;
@@ -39,34 +40,36 @@ const SignIn = () => {
     mutation.mutate(data);
   });
 
-
-
-  const handleGoogleLoginSuccess = async (credentialResponse: GoogleLoginResponse) => {
+  const handleGoogleLoginSuccess = async (
+    credentialResponse: GoogleLoginResponse
+  ) => {
     try {
-      // Call the signInWithGoogle API function passing the Google ID token
-      console.log("🚀 ~ handleGoogleLoginSuccess ~ credentialResponse:", credentialResponse)
+      console.log(
+        "🚀 ~ handleGoogleLoginSuccess ~ credentialResponse:",
+        credentialResponse
+      );
       await apiClient.signInWithGoogle(credentialResponse.tokenId);
-      // Handle successful login as required (e.g., redirect user)
       showToast({ message: "Google login Successful!", type: "SUCCESS" });
       await queryClient.invalidateQueries("validateToken");
       navigate(location.state?.from?.pathname || "/");
     } catch (error) {
-      // Handle any error occurred during Google login
       showToast({ message: error.message, type: "ERROR" });
     }
-      
   };
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={onSubmit}>
-      <h2 className="text-3xl font-bold">Sign In</h2>
+    <form
+      className="flex flex-col gap-5 w-full max-w-md mx-auto"
+      onSubmit={onSubmit}
+    >
+      <h2 className="text-3xl font-bold text-center">Sign In</h2>
       <label className="text-gray-700 text-sm font-bold flex-1">
         Email
         <input
           type="email"
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("email", { required: "This field is required" })}
-        ></input>
+        />
         {errors.email && (
           <span className="text-red-500">{errors.email.message}</span>
         )}
@@ -83,7 +86,7 @@ const SignIn = () => {
               message: "Password must be at least 6 characters",
             },
           })}
-        ></input>
+        />
         {errors.password && (
           <span className="text-red-500">{errors.password.message}</span>
         )}
@@ -97,17 +100,26 @@ const SignIn = () => {
         </span>
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl rounded"
         >
           Login
         </button>
       </span>
-       {/* Google Login Button */}
-       <GoogleLogin
+      {/* Google Login Button */}
+      <GoogleLogin
+        clientId="YOUR_GOOGLE_CLIENT_ID"
         onSuccess={handleGoogleLoginSuccess}
         onError={() => {
-          console.log('Google Login Failed');
+          console.log("Google Login Failed");
         }}
+        render={({ onClick }) => (
+          <button
+            className="bg-red-500 text-white p-2 font-bold hover:bg-red-400 text-xl rounded"
+            onClick={onClick}
+          >
+            Login with Google
+          </button>
+        )}
       />
     </form>
   );
