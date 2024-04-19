@@ -8,13 +8,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendEmail from "../routes/send-emails";
 
-
 const router = express.Router();
 
-
-
 router.post("/", async (req: Request, res: Response) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -26,9 +23,11 @@ router.post("/", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid Credentials: password" });
     }
 
-    const isAdmin = (user.role === "admin");
+    const isAdmin = user.role === "admin";
     if (!isAdmin) {
-      return res.status(400).json({ message: "Invalid Credentials: not admin" });
+      return res
+        .status(400)
+        .json({ message: "Invalid Credentials: not admin" });
     }
     const token = jwt.sign(
       { userId: user.id },
@@ -49,7 +48,7 @@ router.post("/", async (req: Request, res: Response) => {
         fullName: user.firstName + user.lastName,
         email: user.email,
         role: user.role,
-      }
+      },
     };
     res.status(200).json({ data });
   } catch (error) {
@@ -62,9 +61,9 @@ router.post("/info", async (req: Request, res: Response) => {
   try {
     const count = await Hotel.countDocuments({});
     if (!count) {
-      console.error('Error:', "not find any hotel in system");
+      console.error("Error:", "not find any hotel in system");
     } else {
-      res.status(200).json({count})
+      res.status(200).json({ count });
     }
   } catch (error) {
     console.log(error);
@@ -72,11 +71,11 @@ router.post("/info", async (req: Request, res: Response) => {
   }
 });
 
-
-
 router.post("/profile", async (req: Request, res: Response) => {
   try {
-    const users = await User.find({ role: { $ne: 'admin' } }).select("-password");
+    const users = await User.find({ role: { $ne: "admin" } }).select(
+      "-password"
+    );
     //get the user but do not need the password
     if (!users) {
       return res.status(400).json({ message: "Users not found" });
@@ -93,11 +92,13 @@ router.put("/profile/:profile_id", async (req: Request, res: Response) => {
     await User.findOneAndUpdate(
       { _id: req.params.profile_id },
       { $set: req.body },
-     { new: true })
+      { new: true }
+    );
     const user = await User.findById(req.params.profile_id).select("-password");
-    if(user && user._id){
-      user.id = user._id;}
-    
+    if (user && user._id) {
+      user.id = user._id;
+    }
+
     res.json(user);
   } catch (error) {
     console.log(error);
@@ -112,16 +113,13 @@ router.delete("/profile/:profile_id", async (req: Request, res: Response) => {
       // delete all hotels of user
       await Hotel.deleteMany({ userId: req.params.profile_id });
     }
-    await User.findByIdAndDelete(req.params.profile_id)
-    res.json({"message": "delete success"});
+    await User.findByIdAndDelete(req.params.profile_id);
+    res.json({ message: "delete success" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });
   }
 });
-
-
-
 
 router.get("/hotel", async (req: Request, res: Response) => {
   try {
@@ -136,10 +134,8 @@ router.get("/hotel", async (req: Request, res: Response) => {
   }
 });
 
-
 router.put("/hotel/:hotel_id", async (req: Request, res: Response) => {
   try {
-    
     const updatedHotel = await Hotel.findOneAndUpdate(
       { _id: req.params.hotel_id },
       { $set: req.body },
@@ -153,33 +149,39 @@ router.put("/hotel/:hotel_id", async (req: Request, res: Response) => {
     res.json(updatedHotel);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Something went wrong with updating the hotel" });
+    res
+      .status(500)
+      .json({ message: "Something went wrong with updating the hotel" });
   }
-    
 });
-
 
 router.delete("/hotel/:hotel_id", async (req: Request, res: Response) => {
   try {
-    await Hotel.findByIdAndDelete(req.params.hotel_id)
-    res.json({"message": "Delete hotel success"});
+    await Hotel.findByIdAndDelete(req.params.hotel_id);
+    res.json({ message: "Delete hotel success" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "something went wrong with delete hotel " });
+    res
+      .status(500)
+      .json({ message: "something went wrong with delete hotel " });
   }
 });
 
 router.put("/emergency", async (req: Request, res: Response) => {
   try {
     const isEmergency = req.body.emergency;
-    await Emergency.updateMany({},{$set: {isEmergency:isEmergency}  });
+    await Emergency.updateMany({}, { $set: { isEmergency: isEmergency } });
 
-    const priceChange = req.body.emergency ? 0.6 : 1/0.6;
-    const result = await Hotel.updateMany({ "emergency": true }, { $mul: { pricePerNight: priceChange } }, { writeConcern: { w: 1 } });
+    const priceChange = req.body.emergency ? 0.6 : 1 / 0.6;
+    const result = await Hotel.updateMany(
+      { emergency: true },
+      { $mul: { pricePerNight: priceChange } },
+      { writeConcern: { w: 1 } }
+    );
     if (!result) {
       return res.status(400).json({ message: "Cannot update hotel price" });
     }
-     const hotels = await Hotel.find();
+    const hotels = await Hotel.find();
     //get the user but do not need the password
     if (!hotels) {
       return res.status(400).json({ message: "Hotels not found" });
@@ -204,18 +206,21 @@ router.get("/emergency", async (req: Request, res: Response) => {
   }
 });
 
-
 router.put("/emergency", async (req: Request, res: Response) => {
   try {
     const isEmergency = req.body.emergency;
-    await Emergency.updateMany({},{$set: {isEmergency:isEmergency}  });
+    await Emergency.updateMany({}, { $set: { isEmergency: isEmergency } });
 
-    const priceChange = req.body.emergency ? 0.6 : 1/0.6;
-    const result = await Hotel.updateMany({ "emergency": true }, { $mul: { pricePerNight: priceChange } }, { writeConcern: { w: 1 } });
+    const priceChange = req.body.emergency ? 0.6 : 1 / 0.6;
+    const result = await Hotel.updateMany(
+      { emergency: true },
+      { $mul: { pricePerNight: priceChange } },
+      { writeConcern: { w: 1 } }
+    );
     if (!result) {
       return res.status(400).json({ message: "Cannot update hotel price" });
     }
-     const hotels = await Hotel.find();
+    const hotels = await Hotel.find();
     //get the user but do not need the password
     if (!hotels) {
       return res.status(400).json({ message: "Hotels not found" });
@@ -228,6 +233,16 @@ router.put("/emergency", async (req: Request, res: Response) => {
 });
 
 router.post("/email", async (req: Request, res: Response) => {
+  try {
+    // await sendEmail(); // Call the sendEmail function from your script
+    const response = await sendEmail();
+    res.status(200).json({ message: "Emails sent successfully" });
+  } catch (error) {
+    console.error("Error sending emails:", error);
+    res.status(500).json({ message: "Failed to send emails" });
+  }
+});
+router.post("/email-order", async (req: Request, res: Response) => {
   try {
     // await sendEmail(); // Call the sendEmail function from your script
     const response = await sendEmail();

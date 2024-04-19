@@ -5,7 +5,7 @@ import Admin from "../models/admin";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import verifyToken from "../middleware/auth";
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client } from "google-auth-library";
 
 const router = express.Router();
 
@@ -16,7 +16,8 @@ router.post(
     check("password", "Password with 6 or more characters required").isLength({
       min: 6,
     }),
-  ],async (req: Request, res: Response) => {
+  ],
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ message: errors.array() });
@@ -56,12 +57,13 @@ router.post(
   }
 );
 
-
 router.post("/login/google", async (req: Request, res: Response) => {
   const { tokenId } = req.body;
-  console.log("🚀 ~ router.post ~ req.body:", req)
+  console.log("🚀 ~ router.post ~ req.body:", req);
   const idToken = tokenId;
-  const googleClient = new OAuth2Client('418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com');
+  const googleClient = new OAuth2Client(
+    "418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com"
+  );
   try {
     // const ticket = await googleClient.verifyIdToken({
     //   idToken: tokenId,
@@ -69,7 +71,8 @@ router.post("/login/google", async (req: Request, res: Response) => {
     // });
     const options = {
       idToken: idToken,
-      audience: '418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com',
+      audience:
+        "418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com",
     };
     const ticket = await googleClient.verifyIdToken(options);
 
@@ -105,8 +108,6 @@ router.post("/login/google", async (req: Request, res: Response) => {
     res.status(500).json({ message: "Google login failed" });
   }
 });
-
-
 
 router.post(
   "/login",
@@ -156,15 +157,17 @@ router.post(
   }
 );
 
-
-
-router.get("/validate-token", verifyToken, async (req: Request, res: Response) => {
-  const user = await User.findOne({ _id: req.userId });
-  if(!user) {
-    return res.status(400).json({ message: "User not found" });
+router.get(
+  "/validate-token",
+  verifyToken,
+  async (req: Request, res: Response) => {
+    const user = await User.findOne({ _id: req.userId });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    res.status(200).send({ role: user.role });
   }
-  res.status(200).send({ role: user.role });
-});
+);
 
 router.post("/logout", (req: Request, res: Response) => {
   res.cookie("auth_token", "", {
@@ -172,6 +175,8 @@ router.post("/logout", (req: Request, res: Response) => {
   });
   res.send();
 });
+
+
 
 // // Route to verify the user's email
 // router.get('/verify', async (req, res) => {

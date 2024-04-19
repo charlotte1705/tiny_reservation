@@ -8,8 +8,6 @@ export type UserType = {
     firstName: string;
     lastName: string;
     role: string;
-    // verificationToken: string; // New field to store verification token
-    // verified: boolean; // New field to indicate if email is verified
 };
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
@@ -17,8 +15,6 @@ const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     role: { type: String, required: true },
-    // verificationToken: { type: String }, // Added field
-    // verified: { type: Boolean, default: false }, // Added field with default value
   });
 
   userSchema.pre("save", async function (next) {

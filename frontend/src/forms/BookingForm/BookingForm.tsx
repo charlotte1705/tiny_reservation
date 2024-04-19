@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import * as apiClient from "../../api/api-client";
 import { useAppContext } from "../../contexts/AppContext";
-
+import axios from "axios";
 type Props = {
   currentUser: UserType;
   paymentIntent: PaymentIntentResponse;
@@ -49,7 +49,24 @@ const BookingForm = ({ currentUser, paymentIntent }: Props) => {
       },
     }
   );
-
+  // HANDLE PUSH EMAIL
+  const handlePushEmail = () => {
+    // Implement your logic for pushing email here
+    // This function will be called when the Push Email button is clicked
+    axios
+    .post(`${API.GET_EMAIL}`)
+    .then((response) => {
+      // Handle successful response from the API
+      console.log('Email pushed successfully:', response.data);
+      console.log('Push Email button clicked');
+    
+    })
+    .catch((error) => {
+      // Handle errors if the request fails
+      console.error('Error pushing email:', error);
+      // Optionally, you can show an error message or perform other actions
+    });
+  };
   const { handleSubmit, register } = useForm<BookingFormData>({
     defaultValues: {
       firstName: currentUser.firstName,
