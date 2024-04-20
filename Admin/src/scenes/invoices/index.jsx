@@ -5,27 +5,35 @@ import { tokens } from './../../theme';
 import Header from './../../components/Header';
 import { Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Button } from '@mui/material';
 import * as API from '../../constants/api';
 import axios from 'axios';
-import { IconButton, Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import { toastAlertFail, toastAlertSuccess } from '../../utils/helperFn';
-import InvoiceModal from './InvoiceModal';
+import BookingModal from './BookingModal';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import '../../index.css';
-const Invoices = ({ setLoading }) => {
+
+const History = ({ setLoading }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [invoices, setInvoices] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [isModal, setModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState('');
+  const [selectedRow, setSelectedRow] = useState();
+  const [selectedIdRow, setSelectedIdRow] = useState();
+  const [isEmergency, setIsEmergency] = useState(false);
+  const [emergencyButtonLabel, setEmergencyButtonLabel] = useState();
+  // const [emailButtonLabel, setEmailButtonLabel] = useState();
   const [typeModal, setTypeModal] = useState(null);
-  // HANDLE DELETE ROOM
+  // HANDLE DELETE Booking
 
   const handleModalOpenWithParams = (type, params) => {
+    const { _id, createdAt, updatedAt, ...selectedRowData } = params.row;
+    setSelectedIdRow(_id);
+    delete params.row.createdAt;
+    delete params.row.updatedAt;
     setTypeModal(type);
-    setSelectedRow(params.row);
+    setSelectedRow(selectedRowData);
     setModal(true);
   };
 
@@ -33,52 +41,105 @@ const Invoices = ({ setLoading }) => {
     setModal(false);
   };
 
-  // HANDLE CREATE ROOM
-  const handleModalOpen = (type) => {
-    setTypeModal(type);
-    setModal(true);
-  };
-
-  const handleModalOpenClose = () => {
-    setModal(false);
-  };
-  // get all rooms by category
-  useEffect(() => {
+  // HANDLE PUSH EMERGENCY
+  const handleModalOpen = () => {
+    const type = !isEmergency;
+    setIsEmergency(type);
+    setEmergencyButtonLabel(type ? "Push Normal" : "Push Emergency");
     axios
-      .get(`${API.INVOICE}`, {
-        withCredentials: true,
-      })
+      .put(`${API.GET_EMERGENCY}`, { "emergency": type })
       .then((res) => {
-        console.log('🚀 ~ file: index.jsx:51 ~ .then ~ res:', res);
-        if (res.data.success) {
-          setInvoices(res.data.message);
+        if (res.data) {
+          setBookings(res.data);
         }
       })
       .catch((error) => {
         console.log(
-          '🚀 ~ file: room-body.component.jsx ~ line 124 ~ handleSubmitRoom ~ error',
+          '🚀 ~ file: Booking-body.component.jsx ~ line 124 ~ handleSubmitBooking ~ error',
           error
         );
       });
+  };
+
+
+  // get all hotels by category
+  useEffect(() => {
+    axios
+      .get(`${API.GET_EMERGENCY}`)
+      .then((res) => {
+        if (res.data) {
+          setIsEmergency(res.data.isEmergency);
+          console.log("🚀 ~ .then ~ isEmergency:", res.data.isEmergency)
+          setEmergencyButtonLabel(res.data.isEmergency ? "Push Normal" : "Push Emergency");
+        }
+      })
+      .catch((error) => {
+        console.log(
+          '🚀 ~ file: Booking-body.component.jsx ~ line 124 ~ handleSubmitBooking ~ error',
+          error
+        );
+      });
+    axios
+      .get(`${API.GET_BOOKING}`)
+      .then((res) => {
+        if (res.data) {
+          setBookings(res.data);
+        }
+      })
+      .catch((error) => {
+        console.log(
+          '🚀 ~ file: Booking-body.component.jsx ~ line 124 ~ handleSubmitBooking ~ error',
+          error
+        );
+      });
+
   }, []);
 
   // handle update UI
   const updateDeleteUI = (id) => {
-    const validRoom = invoices.filter((item) => item.id !== id);
-    setInvoices(validRoom);
+    const validBooking = bookings.filter((item) => item._id !== id);
+    setBookings(validBooking);
+  };
+  // HANDLE PUSH EMAIL
+  const handlePushEmail = () => {
+    // Implement your logic for pushing email here
+    // This function will be called when the Push Email button is clicked
+    axios
+      .post(`${API.GET_EMAIL}`)
+      .then((response) => {
+        // Handle successful response from the API
+        console.log('Email pushed successfully:', response.data);
+        console.log('Push Email button clicked');
+
+      })
+      .catch((error) => {
+        // Handle errors if the request fails
+        console.error('Error pushing email:', error);
+        // Optionally, you can show an error message or perform other actions
+      });
   };
 
-  const updateCreateUI = (newInvoices) => {
-    setInvoices((prevState) => [...prevState, newInvoices]);
+  const updateCreateUI = (newBooking) => {
+    setBookings((prevState) => [...prevState, newBooking]);
   };
 
-  const updateUI = (updatedInvoice) => {
-    if (updatedInvoice) {
-      if (updatedInvoice) {
-        setInvoices(
-          invoices.map((invoice) =>
-            invoice.id === updatedInvoice.id ? updatedInvoice : invoice
-          )
+  const updateUI = (updatedBooking) => {
+    if (updatedBooking) {
+      if (updatedBooking) {
+        setBookings(
+
+          //   hotels.map((Booking) => (Booking._id === updatedBooking.id ? updatedBooking : Booking))
+          // );
+          bookings.map((booking) => {
+            if (booking._id === updatedBooking.id) {
+              updatedBooking._id = booking._id;
+              return updatedBooking;
+            }
+            return booking;
+            // return category._id === updatedCategory.id
+            //   ? updatedCategory
+            //   : category;
+          })
         );
       }
     }
@@ -92,71 +153,77 @@ const Invoices = ({ setLoading }) => {
     toastAlertSuccess(message);
   };
 
-  const navigate = useNavigate();
   const columns = [
-    { field: 'id', headerName: 'ID', flex: 0.5 },
+    { field: '_id', headerName: 'ID', flex: 0.5 },
     {
-      field: 'code',
-      headerName: 'Code',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'date',
-      headerName: 'Date',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'adminAction',
-      headerName: 'Admin Action',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'paymentMethod',
-      headerName: 'Payment Method',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'paymentDate',
-      headerName: 'Payment Date',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'total',
-      headerName: 'Total',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'checkInDate',
-      headerName: 'Check In Date',
+      field: 'name',
+      headerName: 'Hotel Name',
       cellClassName: 'name-column--cell',
       flex: 1,
     },
     {
       field: 'userId',
-      headerName: 'UserID',
+      headerName: 'User ID',
       cellClassName: 'name-column--cell',
       flex: 1,
     },
     {
-      field: 'guestId',
-      headerName: 'GuestID',
+      field: 'firstName',
+      headerName: 'FirstName',
       headerAlign: 'left',
       align: 'left',
       flex: 1,
     },
 
+    {
+      field: 'lastName',
+      headerName: 'LastName',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'adultCount',
+      headerName: 'Adult',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'childCount',
+      headerName: 'Child',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'checkIn',
+      headerName: 'CheckIn',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'checkOut',
+      headerName: 'CheckOut',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'totalCost',
+      headerName: 'TotalCost',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
     {
       headerName: 'Actions',
       width: 100,
@@ -164,22 +231,18 @@ const Invoices = ({ setLoading }) => {
         return (
           <>
             <div>
-              {/* <IconButton
+              <IconButton
                 onClick={() => handleModalOpenWithParams('edit', params)}
               >
                 <Edit sx={{ color: colors.blueAccent[500] }} />
               </IconButton>
+              {/* <IconButton onClick={() => handleDelete(params.id)}> */}
+
+
               <IconButton
                 onClick={() => handleModalOpenWithParams('delete', params)}
               >
                 <Delete sx={{ color: colors.redAccent[500] }} />
-              </IconButton> */}
-              <IconButton
-                onClick={() => {
-                  navigate(`/invoice/${params.row.id}`);
-                }}
-              >
-                <Button variant="outlined">Detail</Button>
               </IconButton>
             </div>
           </>
@@ -189,7 +252,7 @@ const Invoices = ({ setLoading }) => {
   ];
   return (
     <Box m="20px">
-      <Header title="Invoices" subtitle="List of Invoices" />
+      <Header title="Room" subtitle="List of Rooms" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -222,34 +285,43 @@ const Invoices = ({ setLoading }) => {
           },
         }}
       >
-        {/* <Box display="flex" justifyContent="end" mt="20px">
+        <Box display="flex" justifyContent="end" mt="20px">
           <Button
             type="submit"
             color="secondary"
             variant="contained"
-            onClick={() => handleModalOpen('create')}
+            onClick={() => handleModalOpen()}
           >
-            Create New Invoice
+            {emergencyButtonLabel}
           </Button>
-        </Box> */}
-        {selectedRow && (
-          <InvoiceModal
-            type={typeModal}
-            open={isModal}
-            onClose={handleModalCloseWithParams}
-            selectedRow={selectedRow}
-            updateCreateUI={updateCreateUI}
-            updateDeleteUI={updateDeleteUI}
-            updateUI={updateUI}
-            handleToastFail={handleToastFail}
-            handleToastSuccess={handleToastSuccess}
-            setLoading={setLoading}
-          />
-        )}
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            onClick={() => handlePushEmail()}
+            style={{ marginLeft: '10px' }}
+          >
+            {/* {emailButtonLabel} */}
+            Push Email
+          </Button>
+        </Box>
+        <BookingModal
+          type={typeModal}
+          open={isModal}
+          onClose={handleModalCloseWithParams}
+          selectedRow={selectedRow}
+          selectedIdRow={selectedIdRow}
+          updateCreateUI={updateCreateUI}
+          updateDeleteUI={updateDeleteUI}
+          updateUI={updateUI}
+          handleToastFail={handleToastFail}
+          handleToastSuccess={handleToastSuccess}
+          setLoading={setLoading}
+        />
         <DataGrid
-          key={invoices.id}
-          getRowId={(row) => row.id}
-          rows={invoices}
+          key={bookings._id}
+          getRowId={(row) => row._id}
+          rows={bookings}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />
@@ -258,4 +330,4 @@ const Invoices = ({ setLoading }) => {
     </Box>
   );
 };
-export default Invoices;
+export default History;

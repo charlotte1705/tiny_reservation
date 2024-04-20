@@ -24,12 +24,13 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
 
       return hotelWithUserBookings;
     });
+    // add booking to history
 
     res.status(200).send(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Unable to fetch bookings" });
-  } 
+  }
 });
 
 export default router;

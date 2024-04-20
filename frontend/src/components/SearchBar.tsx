@@ -43,7 +43,7 @@ const SearchBar = () => {
           className="text-md w-full focus:outline-none"
           value={destination}
           onChange={(event) => setDestination(event.target.value)}
-        /> 
+        />
       </div>
 
       <div className="flex bg-white px-2 py-1 gap-2">

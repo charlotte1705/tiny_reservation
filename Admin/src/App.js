@@ -4,19 +4,17 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Team from "./scenes/team";
-import Invoices from "./scenes/invoices";
-import Guests from "./scenes/guests";
+import History from "./scenes/invoices";
 import Bar from "./scenes/bar";
 import Form from "./scenes/form";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
-import Profile from "./scenes/profile";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
-import Category from "./scenes/category";
+import Category from "./scenes/profile";
 import Room from "./scenes/room";
 import Login from "./scenes/login";
 import Signup from "./scenes/signup";
@@ -102,21 +100,13 @@ function App() {
                   />
                 }
               />
+
               <Route
-                path="/guest"
+                path="/history"
                 exact
                 element={
                   <PrivateRoute
-                    Component={<Guests setLoading={setLoading} />}
-                  />
-                }
-              />
-              <Route
-                path="/invoices"
-                exact
-                element={
-                  <PrivateRoute
-                    Component={<Invoices setLoading={setLoading} />}
+                    Component={<History setLoading={setLoading} />}
                   />
                 }
               />
@@ -150,7 +140,7 @@ function App() {
                 exact
                 element={
                   <PrivateRoute
-                    Component={<Profile setLoading={setLoading} />}
+                    Component={<Category setLoading={setLoading} />}
                   />
                 }
               />

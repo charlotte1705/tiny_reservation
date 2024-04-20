@@ -45,9 +45,9 @@ const Room = ({ setLoading }) => {
   const handleModalOpen = () => {
     const type = !isEmergency;
     setIsEmergency(type);
-    setEmergencyButtonLabel(type ? "Push Normal":"Push Emergency");
-      axios
-      .put(`${API.GET_EMERGENCY}`, {"emergency": type})
+    setEmergencyButtonLabel(type ? "Push Normal" : "Push Emergency");
+    axios
+      .put(`${API.GET_EMERGENCY}`, { "emergency": type })
       .then((res) => {
         if (res.data) {
           setHotels(res.data);
@@ -60,25 +60,25 @@ const Room = ({ setLoading }) => {
         );
       });
   };
-   
+
 
   // get all hotels by category
   useEffect(() => {
     axios
-    .get(`${API.GET_EMERGENCY}`)
-    .then((res) => {
-      if (res.data) {
-        setIsEmergency(res.data.isEmergency);
-        console.log("🚀 ~ .then ~ isEmergency:", res.data.isEmergency)
-        setEmergencyButtonLabel(res.data.isEmergency ? "Push Normal":"Push Emergency");
-      }
-    })
-    .catch((error) => {
-      console.log(
-        '🚀 ~ file: room-body.component.jsx ~ line 124 ~ handleSubmitRoom ~ error',
-        error
-      );
-    });
+      .get(`${API.GET_EMERGENCY}`)
+      .then((res) => {
+        if (res.data) {
+          setIsEmergency(res.data.isEmergency);
+          console.log("🚀 ~ .then ~ isEmergency:", res.data.isEmergency)
+          setEmergencyButtonLabel(res.data.isEmergency ? "Push Normal" : "Push Emergency");
+        }
+      })
+      .catch((error) => {
+        console.log(
+          '🚀 ~ file: room-body.component.jsx ~ line 124 ~ handleSubmitRoom ~ error',
+          error
+        );
+      });
     axios
       .get(`${API.GET_HOTEL}`)
       .then((res) => {
@@ -92,7 +92,7 @@ const Room = ({ setLoading }) => {
           error
         );
       });
-   
+
   }, []);
 
   // handle update UI
@@ -105,18 +105,18 @@ const Room = ({ setLoading }) => {
     // Implement your logic for pushing email here
     // This function will be called when the Push Email button is clicked
     axios
-    .post(`${API.GET_EMAIL}`)
-    .then((response) => {
-      // Handle successful response from the API
-      console.log('Email pushed successfully:', response.data);
-      console.log('Push Email button clicked');
-    
-    })
-    .catch((error) => {
-      // Handle errors if the request fails
-      console.error('Error pushing email:', error);
-      // Optionally, you can show an error message or perform other actions
-    });
+      .post(`${API.GET_EMAIL}`)
+      .then((response) => {
+        // Handle successful response from the API
+        console.log('Email pushed successfully:', response.data);
+        console.log('Push Email button clicked');
+
+      })
+      .catch((error) => {
+        // Handle errors if the request fails
+        console.error('Error pushing email:', error);
+        // Optionally, you can show an error message or perform other actions
+      });
   };
 
   const updateCreateUI = (newRoom) => {
@@ -127,20 +127,20 @@ const Room = ({ setLoading }) => {
     if (updatedRoom) {
       if (updatedRoom) {
         setHotels(
-          
-        //   hotels.map((room) => (room._id === updatedRoom.id ? updatedRoom : room))
-        // );
-        hotels.map((room) => {
-          if(room._id === updatedRoom.id){
-            updatedRoom._id = room._id;
-            return updatedRoom;
-          }
-          return room;
-          // return category._id === updatedCategory.id
-          //   ? updatedCategory
-          //   : category;
-        })
-      );
+
+          //   hotels.map((room) => (room._id === updatedRoom.id ? updatedRoom : room))
+          // );
+          hotels.map((room) => {
+            if (room._id === updatedRoom.id) {
+              updatedRoom._id = room._id;
+              return updatedRoom;
+            }
+            return room;
+            // return category._id === updatedCategory.id
+            //   ? updatedCategory
+            //   : category;
+          })
+        );
       }
     }
   };
@@ -174,7 +174,7 @@ const Room = ({ setLoading }) => {
       align: 'left',
       flex: 1,
     },
-    
+
     {
       field: 'description',
       headerName: 'Description',
@@ -204,6 +204,13 @@ const Room = ({ setLoading }) => {
       flex: 1,
     },
     {
+      field: 'limit',
+      headerName: 'Limit',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
+    },
+    {
       field: 'status',
       headerName: 'Status',
       headerAlign: 'left',
@@ -223,8 +230,8 @@ const Room = ({ setLoading }) => {
                 <Edit sx={{ color: colors.blueAccent[500] }} />
               </IconButton>
               {/* <IconButton onClick={() => handleDelete(params.id)}> */}
-              
-     
+
+
               <IconButton
                 onClick={() => handleModalOpenWithParams('delete', params)}
               >
@@ -278,13 +285,13 @@ const Room = ({ setLoading }) => {
             variant="contained"
             onClick={() => handleModalOpen()}
           >
-           {emergencyButtonLabel}
+            {emergencyButtonLabel}
           </Button>
           <Button
             type="submit"
             color="primary"
             variant="contained"
-            onClick={() => handlePushEmail()} 
+            onClick={() => handlePushEmail()}
             style={{ marginLeft: '10px' }}
           >
             {/* {emailButtonLabel} */}

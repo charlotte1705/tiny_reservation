@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import User from "../models/user";
 import Hotel from "../models/hotel";
+import History from "../models/history";
 import Emergency from "../models/emergency";
 import { check, validationResult } from "express-validator";
 import verifyToken from "../middleware/auth";
@@ -128,6 +129,19 @@ router.get("/hotel", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Hotels not found" });
     }
     res.json(hotels);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "something went wrong" });
+  }
+});
+
+router.get("/booking", async (req: Request, res: Response) => {
+  try {
+    const result = await History.find();
+    if (!result) {
+      return res.status(400).json({ message: "History not found" });
+    }
+    res.json(result);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });

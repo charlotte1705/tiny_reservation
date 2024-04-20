@@ -5,9 +5,11 @@ import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
 import EmergencySection from "./EmergencySection";
+import { useNavigate } from "react-router-dom";
 
 import { HotelType } from "../../../../backend/src/shared/types";
 import { useEffect } from "react";
+import LimitSection from "./LimitSection";
 
 export type HotelFormData = {
   name: string;
@@ -23,6 +25,7 @@ export type HotelFormData = {
   adultCount: number;
   childCount: number;
   emergency: boolean;
+  limit: number;
 };
 
 type Props = {
@@ -32,6 +35,9 @@ type Props = {
 };
 
 const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
+
+  const navigate = useNavigate();
+
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
 
@@ -54,6 +60,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     formData.append("adultCount", formDataJson.adultCount.toString());
     formData.append("childCount", formDataJson.childCount.toString());
     formData.append("emergency", formDataJson.emergency.toString());
+    formData.append("limit", formDataJson.limit.toString());
 
     formDataJson.facilities.forEach((facility, index) => {
       formData.append(`facilities[${index}]`, facility);
@@ -70,6 +77,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     });
 
     onSave(formData);
+    navigate("/my-hotels");
   });
 
   return (
@@ -80,6 +88,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
         <FacilitiesSection />
         <EmergencySection />
         <GuestsSection />
+        <LimitSection />
         <ImagesSection />
         <span className="flex justify-end">
           <button

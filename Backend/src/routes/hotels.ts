@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import Hotel from "../models/hotel";
-import { BookingType, HotelSearchResponse } from "../shared/types";
+import History from "../models/history";
+import { BookingType, HotelSearchResponse, HistoryType } from "../shared/types";
 import { param, validationResult } from "express-validator";
 import Stripe from "stripe";
 import verifyToken from "../middleware/auth";
@@ -10,7 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 const router = express.Router();
 
 router.get("/search", async (req: Request, res: Response) => {
-  try { 
+  try {
     const query = constructSearchQuery(req.query);
 
     let sortOptions = {};
@@ -32,7 +33,7 @@ router.get("/search", async (req: Request, res: Response) => {
     );
     query.status = "approve";
     const skip = (pageNumber - 1) * pageSize;
-    
+
     const hotels = await Hotel.find(query)
       .sort(sortOptions)
       .skip(skip)
@@ -58,7 +59,7 @@ router.get("/search", async (req: Request, res: Response) => {
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const hotels = await Hotel.find({status : "approve"}).sort("-lastUpdated");
+    const hotels = await Hotel.find({ status: "approve" }).sort("-lastUpdated");
     res.json(hotels);
   } catch (error) {
     console.log("error", error);
@@ -92,7 +93,7 @@ router.post(
   verifyToken,
   async (req: Request, res: Response) => {
     const { numberOfNights } = req.body;
-  
+
     const hotelId = req.params.hotelId;
 
     const hotel = await Hotel.findById(hotelId);
@@ -158,7 +159,6 @@ router.post(
         ...req.body,
         userId: req.userId,
       };
-
       const hotel = await Hotel.findOneAndUpdate(
         { _id: req.params.hotelId },
         {
@@ -166,11 +166,17 @@ router.post(
         }
       );
 
+
       if (!hotel) {
         return res.status(400).json({ message: "hotel not found" });
       }
-
       await hotel.save();
+      const history: HistoryType = {
+        ...newBooking,
+        name: hotel.name,
+      };
+
+      await History.create(history);
       res.status(200).send();
     } catch (error) {
       console.log(error);

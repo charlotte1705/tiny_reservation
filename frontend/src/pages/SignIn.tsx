@@ -6,10 +6,11 @@ import { GoogleLoginResponse } from "@react-oauth/google";
 import { useAppContext } from "../contexts/AppContext";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/signin_api";
+import { message } from "antd";
 
 export type SignInFormData = {
   email: string;
-  password: string;
+  password: string; 
 };
 
 const SignIn = () => {
@@ -27,7 +28,8 @@ const SignIn = () => {
 
   const mutation = useMutation(apiClient.signIn, {
     onSuccess: async () => {
-      showToast({ message: "Sign in Successful!", type: "SUCCESS" });
+      // showToast({ message: "Sign in Successful!", type: "SUCCESS" });
+      message.success("Sign In Successfully!");
       await queryClient.invalidateQueries("validateToken");
       navigate(location.state?.from?.pathname || "/");
     },

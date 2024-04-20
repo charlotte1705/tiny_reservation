@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import { GoogleOAuthProvider } from '@react-oauth/google'; // Import GoogleOAuthProvider
 import { useAppContext } from "./contexts/AppContext";
 import MyBookings from "./pages/MyBookings";
+import AboutUs from "./components/AboutUs"
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -23,7 +24,7 @@ const App = () => {
             path="/"
             element={
               <Layout>
-                <Home/>
+                <Home />
               </Layout>
             }
           />
@@ -31,7 +32,15 @@ const App = () => {
             path="/search"
             element={
               <Layout>
-              <Search />
+                <Search />
+              </Layout>
+            }
+          />
+          <Route
+            path="/about-us"
+            element={
+              <Layout>
+                <AboutUs />
               </Layout>
             }
           />
@@ -97,14 +106,14 @@ const App = () => {
                   </Layout>
                 }
               />
-               <Route
-              path="/my-bookings"
-              element={
-                <Layout>
-                  <MyBookings />
-                </Layout>
-              }
-            />
+              <Route
+                path="/my-bookings"
+                element={
+                  <Layout>
+                    <MyBookings />
+                  </Layout>
+                }
+              />
             </>
           )}
           <Route path="*" element={<Navigate to="/" />} />
