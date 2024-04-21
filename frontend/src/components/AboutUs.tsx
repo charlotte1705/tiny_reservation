@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+// import { Fragment } from "react";
 import about1 from "../assets/about/about-1.jpg";
 import about2 from "../assets/about/about-2.jpg";
 

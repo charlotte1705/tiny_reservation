@@ -139,7 +139,7 @@ const Header = () => {
               </ul>
             </li>
             <li>
-              <Link to="/contact">Contact</Link>
+              <Link to="/contact-us">Contact</Link>
             </li>
           </ul>
         </nav>
@@ -163,7 +163,7 @@ const Header = () => {
             <PhoneOutlined /> <Text>(12) 345 67890</Text>
           </li>
           <li>
-            <MailOutlined /> <Text>info.colorlib@gmail.com</Text>
+            <MailOutlined /> <Text>santanguyen462@gmail.com</Text>
           </li>
         </ul>
       </div>
@@ -248,8 +248,8 @@ const Header = () => {
                           </ul>
                         </Link>
                       </li>
-                      <li className={activeLink === '/contact' ? 'active' : ''}>
-                        <Link to="/contact" className="no-underline" onClick={() => handleLinkClick('/contact')}>
+                      <li className={activeLink === '/contact-us' ? 'active' : ''}>
+                        <Link to="/contact-us" className="no-underline" onClick={() => handleLinkClick('/contact-us')}>
                           Contact
                         </Link>
                       </li>

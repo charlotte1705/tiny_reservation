@@ -13,6 +13,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'; // Import GoogleOAuth
 import { useAppContext } from "./contexts/AppContext";
 import MyBookings from "./pages/MyBookings";
 import AboutUs from "./components/AboutUs"
+import ContactUs from "./pages/ContactUs";
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -25,6 +26,14 @@ const App = () => {
             element={
               <Layout>
                 <Home />
+              </Layout>
+            }
+          />
+          <Route
+            path="/contact-us"
+            element={
+              <Layout>
+                <ContactUs />
               </Layout>
             }
           />
