@@ -8,13 +8,14 @@ import verifyToken from "../middleware/auth";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendEmail from "../routes/send-emails";
+import Admin from "../models/admin";
 
 const router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await Admin.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid Credentials: email" });
     }
@@ -22,13 +23,6 @@ router.post("/", async (req: Request, res: Response) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid Credentials: password" });
-    }
-
-    const isAdmin = user.role === "admin";
-    if (!isAdmin) {
-      return res
-        .status(400)
-        .json({ message: "Invalid Credentials: not admin" });
     }
     const token = jwt.sign(
       { userId: user.id },
@@ -45,10 +39,7 @@ router.post("/", async (req: Request, res: Response) => {
     });
     const data = {
       userInfo: {
-        userId: user.id,
-        fullName: user.firstName + user.lastName,
         email: user.email,
-        role: user.role,
       },
     };
     res.status(200).json({ data });
@@ -57,14 +48,58 @@ router.post("/", async (req: Request, res: Response) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 });
+router.post("/latestHistory", async (req: Request, res: Response) => {
+  try {
+    // get 10 latest booking
+    const bookingTrans = await History.find()
+      .sort({ createdAt: -1 })
+      .limit(10)
+    // .populate("name", "name")
+    // .populate("userId", "firstName lastName");
+    console.log("🚀 ~ router.post ~ data:", bookingTrans)
 
+    if (!bookingTrans) {
+      console.error("Error:", "not find any lastest history in system");
+    } else {
+      res.status(200).json({ result: bookingTrans });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "something went wrong" });
+  }
+});
 router.post("/info", async (req: Request, res: Response) => {
   try {
+    // count all hotels
     const count = await Hotel.countDocuments({});
+    // sum all totalCost in history
+    const saleObtained = await History.aggregate([
+      { $group: { _id: null, total: { $sum: "$totalCost" } } },
+    ]);
+    const sale = saleObtained.length > 0 ? saleObtained[0].total : 0;
+    // count all users
+    const userCount = await User.countDocuments({ role: { $ne: "admin" } });
+    // count all bookings
+    const bookingCount = await History.countDocuments({});
+    const bookingTrans = await History.find()
+      .sort({ createdAt: -1 })
+      .limit(10)
+    // .populate("name", "name")
+    // .populate("userId", "firstName lastName");
+
+    const data = {
+      count,
+      sale,
+      userCount,
+      bookingCount,
+      bookingTrans
+    };
+    console.log("🚀 ~ router.post ~ data:", data)
+
     if (!count) {
       console.error("Error:", "not find any hotel in system");
     } else {
-      res.status(200).json({ count });
+      res.status(200).json({ result: data });
     }
   } catch (error) {
     console.log(error);

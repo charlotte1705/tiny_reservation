@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 export type AdminType = {
-  id: string;
   email: string;
   password: string;
 };

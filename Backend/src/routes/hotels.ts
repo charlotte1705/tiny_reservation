@@ -80,6 +80,10 @@ router.get(
 
     try {
       const hotel = await Hotel.findById(id);
+      console.log("🚀 ~ hotel:", hotel)
+      if (!hotel) {
+        return res.status(404).json({ message: "Hotel not found" });
+      }
       res.json(hotel);
     } catch (error) {
       console.log(error);
@@ -163,6 +167,7 @@ router.post(
         { _id: req.params.hotelId },
         {
           $push: { bookings: newBooking },
+          $inc: { limit: -1 },
         }
       );
 

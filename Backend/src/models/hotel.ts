@@ -29,7 +29,7 @@ const hotelSchema = new mongoose.Schema<HotelType>({
   lastUpdated: { type: Date, required: true },
   emergency: { type: Boolean, required: true },
   status: { type: String, required: true },
-  limit:{type: Number, required: true},
+  limit: { type: Number, required: true },
   bookings: [bookingSchema],
 });
 
