@@ -15,7 +15,7 @@ const AboutUs = () => {
                                 <h2>Intercontinental LA <br />Westlake Hotel</h2>
                             </div>
                             <p className="f-para">
-                                Sona.com is a leading online accommodation site. We’re passionate about
+                                Tiny Reservation is a booking plattform. We’re passionate about
                                 travel. Every day, we inspire and reach millions of travelers across 90 local websites in 41
                                 languages.
                             </p>

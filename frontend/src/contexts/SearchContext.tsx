@@ -12,7 +12,7 @@ type SearchContext = {
     checkIn: Date,
     checkOut: Date,
     adultCount: number,
-    childCount: number
+    childCount: number,
   ) => void;
 };
 
@@ -42,9 +42,13 @@ export const SearchContextProvider = ({
   const [childCount, setChildCount] = useState<number>(() =>
     parseInt(sessionStorage.getItem("childCount") || "1")
   );
+  const [limit, setLimit] = useState<number>(() =>
+    parseInt(sessionStorage.getItem("limit") || "1")
+  );
   const [hotelId, setHotelId] = useState<string>(
     () => sessionStorage.getItem("hotelID") || ""
   );
+
 
   const saveSearchValues = (
     destination: string,
@@ -52,13 +56,16 @@ export const SearchContextProvider = ({
     checkOut: Date,
     adultCount: number,
     childCount: number,
+    limit: number,
     hotelId?: string
+
   ) => {
     setDestination(destination);
     setCheckIn(checkIn);
     setCheckOut(checkOut);
     setAdultCount(adultCount);
     setChildCount(childCount);
+    setLimit(limit);
     if (hotelId) {
       setHotelId(hotelId);
     }
@@ -68,6 +75,7 @@ export const SearchContextProvider = ({
     sessionStorage.setItem("checkOut", checkOut.toISOString());
     sessionStorage.setItem("adultCount", adultCount.toString());
     sessionStorage.setItem("childCount", childCount.toString());
+    // sessionStorage.setItem("limit", limit.toString());
 
     if (hotelId) {
       sessionStorage.setItem("hotelId", hotelId);
@@ -82,6 +90,7 @@ export const SearchContextProvider = ({
         checkOut,
         adultCount,
         childCount,
+        limit,
         hotelId,
         saveSearchValues,
       }}

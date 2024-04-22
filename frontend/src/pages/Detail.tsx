@@ -74,7 +74,9 @@ const Detail = () => {
         <p className="mt-4">
           <span className="font-bold text-black">Room Type:</span> {hotel.type}
         </p>
-
+        <p className="mt-4">
+          <span className="font-bold text-black">Limits:</span> {hotel.limit}
+        </p>
       </div>
 
 
@@ -85,6 +87,7 @@ const Detail = () => {
           <GuestForm
             pricePerNight={hotel.pricePerNight}
             hotelId={hotel._id}
+            limitNumber={hotel.limit}
           />
         </div>
       </div>

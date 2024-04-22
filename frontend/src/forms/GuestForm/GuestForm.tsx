@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 type Props = {
   hotelId: string;
   pricePerNight: number;
+  limitNumber: number;
 };
 
 type GuestFormData = {
@@ -14,9 +15,10 @@ type GuestFormData = {
   checkOut: Date;
   adultCount: number;
   childCount: number;
+  limit: number;
 };
 
-const GuestForm = ({ hotelId, pricePerNight }: Props) => {
+const GuestForm = ({ hotelId, pricePerNight, limitNumber }: Props) => {
   const search = useSearchContext();
   const { isLoggedIn, role, showToast } = useAppContext();
   const navigate = useNavigate();
@@ -34,12 +36,12 @@ const GuestForm = ({ hotelId, pricePerNight }: Props) => {
       checkOut: search.checkOut,
       adultCount: search.adultCount,
       childCount: search.childCount,
+      limit: search.limit,
     },
   });
 
   const checkIn = watch("checkIn");
   const checkOut = watch("checkOut");
-
   const minDate = new Date();
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
@@ -50,25 +52,31 @@ const GuestForm = ({ hotelId, pricePerNight }: Props) => {
       data.checkIn,
       data.checkOut,
       data.adultCount,
-      data.childCount
+      data.childCount,
+      data.limit
     );
     navigate("/sign-in", { state: { from: location } });
   };
 
   const onSubmit = (data: GuestFormData) => {
-    if(role === 'user') {
-    search.saveSearchValues(
-      "",
-      data.checkIn,
-      data.checkOut,
-      data.adultCount,
-      data.childCount
-    );
-    navigate(`/hotel/${hotelId}/booking`);
-  }
-  else {
-    showToast({ message: "Do not have permission", type: "ERROR" });
-  }
+    if (limitNumber == 0) {
+      showToast({ message: "No rooms available", type: "ERROR" });
+      return;
+    }
+    if (role === 'user') {
+      search.saveSearchValues(
+        "",
+        data.checkIn,
+        data.checkOut,
+        data.adultCount,
+        data.childCount,
+        data.limit,
+      );
+      navigate(`/hotel/${hotelId}/booking`);
+    }
+    else {
+      showToast({ message: "Do not have permission", type: "ERROR" });
+    }
   };
 
   return (
@@ -150,7 +158,7 @@ const GuestForm = ({ hotelId, pricePerNight }: Props) => {
             <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
               Book Now
             </button>
-            
+
           ) : (
             <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
               Sign in to Book

@@ -7,31 +7,52 @@ type Props = {
 
 const LatestDestinationCard = ({ hotel }: Props) => {
   return (
-
-    <>
-
-      <Link
-        to={`/detail/${hotel._id}`}
-        className="relative cursor-pointer overflow-hidden rounded-md"
-      >
-        <div className="h-[300px]">
+    <div className="max-w-md ">
+      <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+        <Link
+          to={`/detail/${hotel._id}`}
+          className="block overflow-hidden rounded-t-lg"
+        >
           <img
             src={hotel.imageUrls[0]}
-            className="w-full h-full object-cover object-center"
+            alt={hotel.name}
+            className="w-full h-48 object-cover object-center"
           />
+        </Link>
+
+        <div className="p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2 hover:text-blue-500 transition duration-300">
+            <Link
+              to={`/detail/${hotel._id}`}
+              className="hover:underline"
+            >
+              {hotel.name}
+            </Link>
+          </h2>
+          <p className="text-gray-600 text-sm mb-2">
+            {hotel.city} - Limit: {hotel.limit}
+          </p>
+          <p className="text-gray-700 text-lg mb-2">
+            <span className="hover:text-blue-500 transition duration-300 font-semibold">${hotel.pricePerNight}</span>/night
+          </p>
+          <div className="text-gray-700 text-lg mb-2">
+            <p>Adults: {hotel.adultCount}</p>
+            <p>Children: {hotel.childCount}</p>
+          </div>
         </div>
 
-        <div className="absolute bottom-0 p-4 bg-black bg-opacity-50 w-full rounded-b-md">
-          <span className="text-white font-bold tracking-tight text-3xl">
-            {hotel.name}
-          </span>
+        <div className="bg-gray-100 text-center py-2">
+          <Link
+            to={`/detail/${hotel._id}`}
+            className="text-blue-500 hover:underline hover:text-blue-600"
+          >
+            <span className="inline-block px-4 py-2 bg-blue-500 text-white rounded-md transition duration-300 hover:bg-blue-600">
+              View Details
+            </span>
+          </Link>
         </div>
-      </Link>
-
-
-    </>
-
-
+      </div>
+    </div>
   );
 };
 

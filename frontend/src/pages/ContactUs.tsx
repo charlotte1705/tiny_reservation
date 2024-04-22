@@ -44,6 +44,9 @@ export default function ContactUs() {
 
     return (
         <form onSubmit={(e) => onSubmit(e)} className="max-w-md mx-auto border border-gray-300 shadow-lg rounded-lg p-6">
+            <div className="text-center">
+                <label className="block text-gray-1000 text-2xl mb-4">Contact Us</label>
+            </div>
             <div className="mb-4">
                 <label htmlFor="name" className="block text-gray-700">Full Name</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} id="name" placeholder="Your first and last name" className="mt-1 p-2 w-full border rounded-md" />

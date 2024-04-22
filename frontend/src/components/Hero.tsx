@@ -1,17 +1,25 @@
-import React from "react";
-import heroImage1 from '../assets/hero/hero-1.jpg';
-import heroImage2 from '../assets/hero/hero-2.jpg';
+// import React from "react";
+// import heroImage1 from '../assets/hero/hero-1.jpg';
+// import heroImage2 from '../assets/hero/hero-2.jpg';
 import heroImage3 from '../assets/hero/hero-3.jpg';
-import SearchBar from "./SearchBar";
+// import SearchBar from "./SearchBar";
 
 const Hero = () => {
   return (
-    <div className="bg-gray-300 py-10">
-      <div className="container mx-auto flex flex-col justify-center items-center gap-2 text-center">
-        <h1 className="text-5xl text-black font-bold mb-4">
+    <div
+      className="bg-gray-300 py-10 flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${heroImage3})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '650px'
+      }}
+    >
+      <div className="container mx-auto text-center text-white">
+        <h1 className="text-5xl font-bold mb-4">
           Find your next stay
         </h1>
-        <p className="text-2xl text-black mb-8">
+        <p className="text-2xl mb-8">
           Search low prices on hotels for your dream vacation...
         </p>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -19,6 +27,7 @@ const Hero = () => {
         </button>
       </div>
     </div>
+
 
     // <div className="hero-section relative w-full h-auto bg-cover bg-center" style={{ backgroundImage: `url(${heroImage1})`, paddingTop: '200px', paddingBottom: '200px' }}>
     //   <div className="container mx-auto">
