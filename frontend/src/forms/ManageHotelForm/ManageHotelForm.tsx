@@ -5,11 +5,11 @@ import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
 import EmergencySection from "./EmergencySection";
+import LimitSection from "./LimitSection";
 import { useNavigate } from "react-router-dom";
 
 import { HotelType } from "../../../../backend/src/shared/types";
 import { useEffect } from "react";
-import LimitSection from "./LimitSection";
 
 export type HotelFormData = {
   name: string;
@@ -35,9 +35,7 @@ type Props = {
 };
 
 const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
-
   const navigate = useNavigate();
-
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
 
@@ -82,23 +80,21 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
 
   return (
     <FormProvider {...formMethods}>
-      <form className="flex flex-col gap-10" onSubmit={onSubmit}>
+      <form className="flex flex-col gap-6 p-4 md:p-8 lg:p-12 bg-white rounded-lg shadow-md" onSubmit={onSubmit}>
         <DetailsSection />
         <TypeSection />
         <FacilitiesSection />
-        <EmergencySection />
         <GuestsSection />
         <LimitSection />
+        <EmergencySection />
         <ImagesSection />
-        <span className="flex justify-end">
-          <button
-            disabled={isLoading}
-            type="submit"
-            className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl disabled:bg-gray-500"
-          >
-            {isLoading ? "Saving..." : "Save"}
-          </button>
-        </span>
+        <button
+          disabled={isLoading}
+          type="submit"
+          className="bg-blue-600 text-white py-3 px-6 rounded-md font-bold text-xl hover:bg-blue-500 disabled:bg-gray-500 self-end"
+        >
+          {isLoading ? "Saving..." : "Save"}
+        </button>
       </form>
     </FormProvider>
   );

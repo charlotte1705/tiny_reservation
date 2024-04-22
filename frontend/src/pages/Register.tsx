@@ -43,31 +43,36 @@ const Register = () => {
   });
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={onSubmit}>
-      <h2 className="text-3xl font-bold">Create an Account</h2>
+    <form
+      className="flex flex-col gap-5 max-w-md mx-auto p-6 border border-gray-300 shadow-lg rounded-lg"
+      onSubmit={onSubmit}
+    >
+      <h2 className="text-3xl font-bold text-center">Create an Account</h2>
       <div className="flex flex-col md:flex-row gap-5">
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          First Name
-          <input
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("firstName", { required: "This field is required" })}
-          />
-          {errors.firstName && (
-            <span className="text-red-500">{errors.firstName.message}</span>
-          )}
-        </label>
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          Last Name
-          <input
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("lastName", { required: "This field is required" })}
-          />
-          {errors.lastName && (
-            <span className="text-red-500">{errors.lastName.message}</span>
-          )}
-        </label>
+        <div className="flex flex-col flex-1">
+          <label className="text-gray-700">
+            First Name
+            <input
+              className="border rounded w-full py-1 px-2 font-normal"
+              {...register("firstName", { required: "This field is required" })}
+            />
+            {errors.firstName && (
+              <span className="text-red-500">{errors.firstName.message}</span>
+            )}
+          </label>
+          <label className="text-gray-700">
+            Last Name
+            <input
+              className="border rounded w-full py-1 px-2 font-normal"
+              {...register("lastName", { required: "This field is required" })}
+            />
+            {errors.lastName && (
+              <span className="text-red-500">{errors.lastName.message}</span>
+            )}
+          </label>
+        </div>
       </div>
-      <label className="text-gray-700 text-sm font-bold flex-1">
+      <label className="text-gray-700">
         Email
         <input
           type="email"
@@ -78,7 +83,7 @@ const Register = () => {
           <span className="text-red-500">{errors.email.message}</span>
         )}
       </label>
-      <label className="text-gray-700 text-sm font-bold flex-1">
+      <label className="text-gray-700">
         Password
         <input
           type="password"
@@ -86,8 +91,12 @@ const Register = () => {
           {...register("password", {
             required: "This field is required",
             minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters",
+              value: 8,
+              message: "Password must be at least 8 characters",
+            },
+            pattern: {
+              value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{8,}$/,
+              message: "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
             },
           })}
         />
@@ -95,7 +104,7 @@ const Register = () => {
           <span className="text-red-500">{errors.password.message}</span>
         )}
       </label>
-      <label className="text-gray-700 text-sm font-bold flex-1">
+      <label className="text-gray-700">
         Confirm Password
         <input
           type="password"
@@ -114,33 +123,12 @@ const Register = () => {
           <span className="text-red-500">{errors.confirmPassword.message}</span>
         )}
       </label>
-      <h3 className="text-lg font-semibold text-center">
-        Please choose your role
-      </h3>
-      <div className="flex justify-center gap-3">
-        <button
-          className={`bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 hover:text-white text-xl rounded`}
-          onClick={() => {}}
-          type="button"
-        >
-          Customer
-        </button>
-        <button
-          className={`bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 hover:text-white text-xl rounded`}
-          onClick={() => {}}
-          type="button"
-        >
-          Landlord
-        </button>
-      </div>
-      <span>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl rounded"
-        >
-          Create Account
-        </button>
-      </span>
+      <button
+        type="submit"
+        className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl rounded"
+      >
+        Create Account
+      </button>
     </form>
   );
 };

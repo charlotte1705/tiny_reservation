@@ -5,15 +5,15 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
+// import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppContext } from "../contexts/AppContext";
 import SignOutButton from './SignOutButton'; // Import SignOutButton component
-import MyBookings from '../pages/MyBookings';
+// import MyBookings from '../pages/MyBookings';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -97,32 +97,37 @@ export default function CustomizedMenus() {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose} disableRipple>
+                <MenuItem
+                    onClick={handleClose}
+                    disableRipple
+                    component={Link} // Use Link component from react-router-dom
+                    to="/my-profile" // Specify the target link
+                >
                     <EditIcon />
                     Profile
                 </MenuItem>
                 {role === "user" && (
-                <MenuItem
-                    onClick={handleClose}
-                    disableRipple
-                    component={Link} // Use Link component from react-router-dom
-                    to="/my-bookings" // Specify the target link
-                >
-                    <FileCopyIcon />
-                    My Booking
-                </MenuItem>
-                 )}
-                  {role !== "user" && (
-                <MenuItem
-                    onClick={handleClose}
-                    disableRipple
-                    component={Link} // Use Link component from react-router-dom
-                    to="/my-hotels" // Specify the target link
-                >
-                    <FileCopyIcon />
-                    My Hotel
-                </MenuItem>
-                    )}
+                    <MenuItem
+                        onClick={handleClose}
+                        disableRipple
+                        component={Link} // Use Link component from react-router-dom
+                        to="/my-bookings" // Specify the target link
+                    >
+                        <FileCopyIcon />
+                        My Booking
+                    </MenuItem>
+                )}
+                {role !== "user" && (
+                    <MenuItem
+                        onClick={handleClose}
+                        disableRipple
+                        component={Link} // Use Link component from react-router-dom
+                        to="/my-hotels" // Specify the target link
+                    >
+                        <FileCopyIcon />
+                        My Hotel
+                    </MenuItem>
+                )}
                 <Divider sx={{ my: 0.5 }} />
                 {isLoggedIn && (
                     <MenuItem onClick={handleLogout} disableRipple>

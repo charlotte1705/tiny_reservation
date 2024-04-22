@@ -1,17 +1,25 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import * as apiClient from "../api/api-client";
 import { BsBuilding, BsMap } from "react-icons/bs";
 import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 
+const truncateDescription = (text, maxLength) => {
+  if (text.length <= maxLength) return text;
+  return text.substr(0, maxLength) + "...";
+};
+
 const MyHotels = () => {
   const { data: hotelData } = useQuery(
     "fetchMyHotels",
     apiClient.fetchMyHotels,
     {
-      onError: () => {},
+      onError: () => { },
     }
   );
+
+  const [expandedHotel, setExpandedHotel] = useState<string | null>(null);
 
   if (!hotelData) {
     return <span>No Hotels found</span>;
@@ -36,7 +44,23 @@ const MyHotels = () => {
             key={hotel._id}
           >
             <h2 className="text-2xl font-bold">{hotel.name}</h2>
-            <div className="whitespace-pre-line">{hotel.description}</div>
+            <div className="whitespace-pre-line">
+              {expandedHotel === hotel._id
+                ? hotel.description
+                : truncateDescription(hotel.description, 150)}
+            </div>
+            {hotel.description.length > 150 && (
+              <button
+                onClick={() =>
+                  setExpandedHotel(
+                    expandedHotel === hotel._id ? null : hotel._id
+                  )
+                }
+                className="text-blue-600 font-semibold hover:text-blue-800 transition-colors duration-300"
+              >
+                {expandedHotel === hotel._id ? "Show Less" : "Show More"}
+              </button>
+            )}
             <div className="grid grid-cols-5 gap-2">
               <div className="border border-slate-300 rounded-sm p-3 flex items-center">
                 <BsMap className="mr-1" />

@@ -14,6 +14,7 @@ import { useAppContext } from "./contexts/AppContext";
 import MyBookings from "./pages/MyBookings";
 import AboutUs from "./components/AboutUs"
 import ContactUs from "./pages/ContactUs";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -120,6 +121,14 @@ const App = () => {
                 element={
                   <Layout>
                     <MyBookings />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/my-profile"
+                element={
+                  <Layout>
+                    <Profile /> 
                   </Layout>
                 }
               />

@@ -14,7 +14,7 @@ const GuestsSection = () => {
         <label className="text-gray-700 text-sm font-semibold">
           Adults
           <input
-            className="border rounded w-full py-2 px-3 font-normal"
+            className="border rounded border-gray-500 w-full py-2 px-3 font-normal"
             type="number"
             min={1}
             {...register("adultCount", {
@@ -22,7 +22,7 @@ const GuestsSection = () => {
             })}
           />
           {errors.adultCount?.message && (
-            <span className="text-red-500 text-sm fold-bold">
+            <span className="text-red-500 text-sm font-bold">
               {errors.adultCount?.message}
             </span>
           )}
@@ -30,7 +30,7 @@ const GuestsSection = () => {
         <label className="text-gray-700 text-sm font-semibold">
           Children
           <input
-            className="border rounded w-full py-2 px-3 font-normal"
+            className="border rounded border-gray-500 w-full py-2 px-3 font-normal"
             type="number"
             min={0}
             {...register("childCount", {
@@ -38,7 +38,7 @@ const GuestsSection = () => {
             })}
           />
           {errors.childCount?.message && (
-            <span className="text-red-500 text-sm fold-bold">
+            <span className="text-red-500 text-sm font-bold">
               {errors.childCount?.message}
             </span>
           )}
