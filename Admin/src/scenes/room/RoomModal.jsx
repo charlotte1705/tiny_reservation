@@ -287,26 +287,7 @@ function RoomModal({
                     fullWidth
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <TextField
-                    name="adult"
-                    label="Adult"
-                    value={formFields ? formFields.adult : null}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    name="kid"
-                    label="Kid"
-                    value={formFields ? formFields.kid : null}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                  />
-                </Grid> */}
+
                 <Grid item xs={12}>
                   <TextField
                     name="price"
@@ -348,49 +329,6 @@ function RoomModal({
                 style={{ display: 'flex', alignItems: 'center' }}
                 marginBottom="20px"
               >
-                {/* <Box
-                  className={classes.root}
-                  sx={{ display: 'flex', flexDirection: 'column' }}
-                >
-                  {file && (
-                    <>
-                      <Typography className={classes.filename}>
-                        {file.name}
-                      </Typography>
-                      {preview && (
-                        <img
-                          className={classes.preview}
-                          src={preview}
-                          alt="Preview"
-                        />
-                      )}
-                    </>
-                  )}
-                  {!file && data.thumbnail && (
-                    <>
-                      {data && (
-                        <img
-                          className={classes.preview}
-                          src={data.thumbnail}
-                          alt="Preview"
-                        />
-                      )}
-                    </>
-                  )}
-                  <InputBase
-                    className={classes.input}
-                    type="file"
-                    onChange={handleFileChange}
-                    inputProps={{ accept: 'image/*' }}
-                    id="upload-button"
-                    sx={{ display: 'none' }}
-                  />
-                  <label htmlFor="upload-button">
-                    <Button variant="contained" component="span">
-                      Upload
-                    </Button>
-                  </label>
-                </Box> */}
               </Box>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
@@ -452,27 +390,24 @@ function RoomModal({
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <FormControl fullWidth>
-                <InputLabel htmlFor="status_id">
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="status_id">
                       Status
-                  </InputLabel>
+                    </InputLabel>
                     <Select
                       label="Status"
                       id="status_id"
                       name="status"
-                      value={formFields ? formFields.status : null}
+                      value={formFields ? formFields.status : " "}
                       onChange={handleChange}
-                      // onChange={(event) => {
-                      //   formFields.status = event.target.value;
-                      //   setHotelStatus(event.target.value);
-                      // }}
+
                     >
                       <MenuItem value={"pending"}>Pending</MenuItem>
                       <MenuItem value={"approve"}>Approve</MenuItem>
                       <MenuItem value={"reject"}>Reject</MenuItem>
                     </Select>
                   </FormControl>
-                  </Grid>
+                </Grid>
               </Grid>
             </form>
           </DialogContent>
@@ -504,7 +439,7 @@ function RoomModal({
                 <DialogContentText>
                   Are you sure you want to delete this item?
                 </DialogContentText>
-               
+
               </Box>
             </form>
           </DialogContent>

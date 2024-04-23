@@ -14,7 +14,7 @@ import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
-import Category from "./scenes/profile";
+import Profile from "./scenes/profile";
 import Room from "./scenes/room";
 import Login from "./scenes/login";
 import Signup from "./scenes/signup";
@@ -124,7 +124,7 @@ function App() {
                 exact
                 element={
                   <PrivateRoute
-                    Component={<Category setLoading={setLoading} />}
+                    Component={<Profile setLoading={setLoading} />}
                   />
                 }
               />
@@ -140,7 +140,7 @@ function App() {
                 exact
                 element={
                   <PrivateRoute
-                    Component={<Category setLoading={setLoading} />}
+                    Component={<Profile setLoading={setLoading} />}
                   />
                 }
               />

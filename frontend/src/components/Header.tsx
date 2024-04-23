@@ -29,7 +29,7 @@ const Header = () => {
 
   return (
     <>
-    
+
       <header className="header-section">
         <div className="menu-item">
           <div className="container">
@@ -37,7 +37,7 @@ const Header = () => {
               <div className="col-2 h-16 flex items-center">
                 <div className="logo">
                   <Link to="/">
-                    <img src={logoImage} alt="Logo" className="w-20 h-auto mt-3" />
+                    <img src={logoImage} alt="Logo" className="w-20 h-auto mt-5" />
                   </Link>
                 </div>
               </div>

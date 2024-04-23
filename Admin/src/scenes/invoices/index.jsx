@@ -224,31 +224,6 @@ const History = ({ setLoading }) => {
       align: 'left',
       flex: 1,
     },
-    {
-      headerName: 'Actions',
-      width: 100,
-      renderCell: (params) => {
-        return (
-          <>
-            <div>
-              <IconButton
-                onClick={() => handleModalOpenWithParams('edit', params)}
-              >
-                <Edit sx={{ color: colors.blueAccent[500] }} />
-              </IconButton>
-              {/* <IconButton onClick={() => handleDelete(params.id)}> */}
-
-
-              <IconButton
-                onClick={() => handleModalOpenWithParams('delete', params)}
-              >
-                <Delete sx={{ color: colors.redAccent[500] }} />
-              </IconButton>
-            </div>
-          </>
-        );
-      },
-    },
   ];
   return (
     <Box m="20px">

@@ -41,19 +41,21 @@ const SignIn = () => {
     mutation.mutate(data);
   });
 
-  const handleGoogleLoginSuccess = async (
-    credentialResponse: GoogleLoginResponse
-  ) => {
+  const handleGoogleLoginSuccess = async (credentialResponse: GoogleLoginResponse) => {
     try {
-      await apiClient.signInWithGoogle(credentialResponse.tokenId);
+      // Call the signInWithGoogle API function passing the Google ID token
+      console.log("🚀 ~ handleGoogleLoginSuccess ~ credentialResponse:", credentialResponse)
+      await apiClient.signInWithGoogle(credentialResponse.credential);
+      // Handle successful login as required (e.g., redirect user)
       showToast({ message: "Google login Successful!", type: "SUCCESS" });
       await queryClient.invalidateQueries("validateToken");
       navigate(location.state?.from?.pathname || "/");
     } catch (error) {
+      // Handle any error occurred during Google login
       showToast({ message: error.message, type: "ERROR" });
     }
-  };
 
+  };
   return (
     <form
       className="flex flex-col gap-5 w-full max-w-md mx-auto border border-gray-300 shadow-lg rounded-lg p-6"
@@ -101,7 +103,7 @@ const SignIn = () => {
         </Link>
       </span>
       <GoogleLogin
-        clientId="YOUR_GOOGLE_CLIENT_ID"
+        clientId="418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com"
         onSuccess={handleGoogleLoginSuccess}
         onError={() => {
           console.log("Google Login Failed");

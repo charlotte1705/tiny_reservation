@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -9,25 +9,23 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
-import LineChart from "../../components/LineChart";
 import GeographyChart from "../../components/GeographyChart";
-import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
-import ProgressCircle from "../../components/ProgressCircle";
 import * as API from '../../constants/api';
 import axios from 'axios';
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [hotelCount, setHotelCount] = useState(0);
-
-    // get all hotels by category
-    useEffect(() => {
-      axios
+  const [hotelData, setHotelData] = useState({});
+  const [latestHistory, setLatestHistory] = useState([]);
+  // get all hotels by category
+  useEffect(() => {
+    axios
       .post(`${API.GET_INFO}`)
       .then((res) => {
         if (res.data) {
-          setHotelCount(res.data.count)
+          setHotelData(res.data.result)
+          console.log("🚀 ~ .then ~ res.data:", hotelData)
         }
       })
       .catch((error) => {
@@ -36,7 +34,25 @@ const Dashboard = () => {
           error
         );
       });
-    },[]);
+    axios
+      .post(`${API.GET_LATEST_HISTORY}`)
+      .then((res) => {
+        if (res.data) {
+          setLatestHistory(res.data.result)
+          console.log("🚀 ~ .then ~ lastesthistory:", latestHistory)
+        }
+      })
+      .catch((error) => {
+        console.log(
+          '🚀 ~ file: room-body.component.jsx ~ line 124 ~ handleSubmitRoom ~ error',
+          error
+        );
+      });
+  }, []);
+  useEffect(() => {
+    console.log("lastestHistory", latestHistory, hotelData)
+  }
+    , [hotelData, latestHistory])
   return (
     <Box m="20px">
       {/* HEADER */}
@@ -75,10 +91,9 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={hotelCount}
+            title={hotelData.count}
             subtitle="Hotels"
-            progress="0.75"
-            increase="+14%"
+            progress="1"
             icon={
               <EmailIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -94,10 +109,9 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="431,225"
-            subtitle="Sales Obtained"
-            progress="0.50"
-            increase="+21%"
+            title={hotelData.sale}
+            subtitle="Email Submissions"
+            progress="1"
             icon={
               <PointOfSaleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -113,10 +127,9 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
+            title={hotelData.userCount}
             subtitle="New Clients"
-            progress="0.30"
-            increase="+5%"
+            progress="1"
             icon={
               <PersonAddIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -132,10 +145,9 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
-            progress="0.80"
-            increase="+43%"
+            title={hotelData.bookingCount}
+            subtitle="Bookings Complete"
+            progress="1"
             icon={
               <TrafficIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -144,49 +156,8 @@ const Dashboard = () => {
           />
         </Box>
 
-        {/* ROW 2 */}
         <Box
           gridColumn="span 8"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Box
-            mt="25px"
-            p="0 30px"
-            display="flex "
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Revenue Generated
-              </Typography>
-              <Typography
-                variant="h3"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-                $59,342.32
-              </Typography>
-            </Box>
-            <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
-            </Box>
-          </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           overflow="auto"
@@ -203,9 +174,9 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {latestHistory.map((transaction, i) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={`${transaction._id}-${i}`}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -218,66 +189,22 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {transaction.txId}
+                  {transaction._id}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {transaction.user}
+                  {transaction.firstName} {transaction.lastName}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              <Box color={colors.grey[100]}>{transaction.checkOut}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                ${transaction.totalCost}
               </Box>
             </Box>
           ))}
-        </Box>
-
-        {/* ROW 3 */}
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          p="30px"
-        >
-          <Typography variant="h5" fontWeight="600">
-            Campaign
-          </Typography>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            mt="25px"
-          >
-            <ProgressCircle size="125" />
-            <Typography
-              variant="h5"
-              color={colors.greenAccent[500]}
-              sx={{ mt: "15px" }}
-            >
-              $48,352 revenue generated
-            </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ padding: "30px 30px 0 30px" }}
-          >
-            Sales Quantity
-          </Typography>
-          <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
-          </Box>
         </Box>
         <Box
           gridColumn="span 4"

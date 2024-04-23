@@ -28,6 +28,7 @@ export const GET_HOTEL = `${BASE_URL}/dashboard/hotel`;
 export const GET_BOOKING = `${BASE_URL}/dashboard/booking`;
 
 export const GET_INFO = `${BASE_URL}/dashboard/info`;
+export const GET_LATEST_HISTORY = `${BASE_URL}/dashboard/latestHistory`;
 
 export const GET_EMERGENCY = `${BASE_URL}/dashboard/emergency`;
 

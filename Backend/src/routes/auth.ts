@@ -57,38 +57,43 @@ router.post(
   }
 );
 
+
 router.post("/login/google", async (req: Request, res: Response) => {
   const { tokenId } = req.body;
-  console.log("🚀 ~ router.post ~ req.body:", req);
-  const idToken = tokenId;
-  const googleClient = new OAuth2Client(
-    "418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com"
-  );
-  try {
-    // const ticket = await googleClient.verifyIdToken({
-    //   idToken: tokenId,
-    //   audience: '418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com',
-    // });
-    const options = {
-      idToken: idToken,
-      audience:
-        "418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com",
-    };
-    const ticket = await googleClient.verifyIdToken(options);
 
-    console.log(ticket);
+  const googleClient = new OAuth2Client('418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com');
+
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokenId,
+      audience: '418140660178-4llvtgne2b4tqimo2op4of2bjf2ddq37.apps.googleusercontent.com',
+    });
 
     const payload = ticket.getPayload();
+
     if (!payload || !payload.email) {
       return res.status(400).json({ message: "Invalid Google token payload" });
     }
 
-    const { email } = payload;
+    const { email, given_name, family_name } = payload;
+
     let user = await User.findOne({ email });
 
     if (!user) {
-      // You may handle user creation here if it doesn't exist
-      return res.status(400).json({ message: "User not found" });
+      // If user doesn't exist, create a new user
+      user = new User({
+        email,
+        firstName: given_name as string,
+        lastName: family_name as string,
+        role: "user", // Assuming default role is user
+        password: null
+      });
+      await user.save();
+    } else {
+      // If user exists, update user information with Google data
+      user.firstName = given_name as string;
+      user.lastName = family_name as string;
+      await user.save();
     }
 
     const token = jwt.sign(
@@ -108,6 +113,7 @@ router.post("/login/google", async (req: Request, res: Response) => {
     res.status(500).json({ message: "Google login failed" });
   }
 });
+
 
 router.post(
   "/login",

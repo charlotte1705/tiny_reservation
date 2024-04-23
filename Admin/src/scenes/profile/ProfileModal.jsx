@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import { Box, DialogContentText, Grid, InputBase } from "@mui/material";
+import { Box, DialogContentText, Grid, InputBase, FormControl, Select, MenuItem, InputLabel } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import * as API from "../../constants/api";
 import { Typography } from "@mui/material";
@@ -35,13 +35,10 @@ function CreateCategoryModal({
   type,
   open,
   onClose,
-  categories,
-  updateCreateUI,
   updateDeleteUI,
   updateUI,
   selectedRow,
   selectedIdRow,
-  handleToastFail,
   handleToastSuccess,
   setLoading,
 }) {
@@ -104,38 +101,6 @@ function CreateCategoryModal({
     }
   };
 
-  // handle create category
-  // const handleCreate = async (event) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   const formData = new FormData(document.getElementById("my-form"));
-
-  //   formData.append("thumbnail", formFields.thumbnail);
-  //   await axios
-  //     .post(API.CATEGORY, formData, {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => {
-  //       console.log("🚀 ~ file: CategoryModal.jsx:63 ~ .then ~ res:", res);
-  //       updateCreateUI(res.data);
-  //       // reset value in form and file
-  //       setFormFields(null);
-  //       setFile(null);
-
-  //       setLoading(false);
-  //       handleToastSuccess("Create category successfully");
-  //       onClose(res.data);
-  //     })
-  //     .catch((error) => {
-  //       setLoading(false);
-  //       console.log(
-  //         "🚀 ~ file: CategoryModal.jsx:69 ~ handleSubmit ~ error:",
-  //         error
-  //       );
-  //       console.error(error);
-  //       return setError(error.response.data.message);
-  //     });
-  // };
 
   // handle update category
   const handleUpdate = async (event) => {
@@ -191,104 +156,7 @@ function CreateCategoryModal({
 
   return (
     <>
-      {/* {type === "create" && (
-        <Dialog open={open} onClose={() => onClose()}>
-          <DialogTitle variant="h2">Create Room</DialogTitle>
-          <DialogContent>
-            <form onSubmit={handleCreate} id="my-form">
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                marginBottom="20px"
-              >
-                <Box
-                  className={classes.root}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Box
-                    className={classes.root}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyItems: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {file && (
-                      <>
-                        <Typography className={classes.filename}>
-                          {file.name}
-                        </Typography>
-                        {preview && (
-                          <img
-                            className={classes.preview}
-                            src={preview}
-                            alt="Preview"
-                          />
-                        )}
-                      </>
-                    )}
 
-                    <InputBase
-                      className={classes.input}
-                      type="file"
-                      onChange={handleFileChange}
-                      inputProps={{ accept: "image/*" }}
-                      id="upload-button"
-                      sx={{ display: "none" }}
-                    />
-                    <label htmlFor="upload-button">
-                      <Button variant="contained" component="span">
-                        Upload
-                      </Button>
-                    </label>
-                  </Box>
-                </Box>
-              </Box>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <TextField
-                    name="name"
-                    label="Category Name"
-                    value={formFields ? formFields.name : null}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    name="description"
-                    label="Description"
-                    value={formFields ? formFields.description : null}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Box display="flex" alignItems="center">
-              {error && (
-                <Box mr={2} color="red">
-                  {error}
-                </Box>
-              )}
-            </Box>
-            <Button onClick={() => onClose()}>Cancel</Button>
-            <Button onClick={handleCreate} variant="contained" color="primary">
-              Create
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )} */}
       {type === "edit" && selectedRow && (
         <Dialog open={open} onClose={() => onClose()}>
           <DialogTitle>Update Category</DialogTitle>
@@ -364,14 +232,23 @@ function CreateCategoryModal({
                     fullWidth
                   />
                 </Grid>
+
                 <Grid item xs={12}>
-                  <TextField
-                    name="role"
-                    label="Role"
-                    value={formFields ? formFields.role : null}
-                    onChange={handleChange}
-                    fullWidth
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="role_id">
+                      Role
+                    </InputLabel>
+                    <Select
+                      label="Role"
+                      id="role_id"
+                      name="role"
+                      value={formFields ? formFields.role : " "}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={"user"}>User</MenuItem>
+                      <MenuItem value={"landlord"}>Landlord</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
             </form>

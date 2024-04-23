@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useTheme, IconButton } from "@mui/material";
-import { tokens } from "./../../theme";
-import Header from "./../../components/Header";
+import { tokens } from "../../theme";
+import Header from "../../components/Header";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import * as API from "../../constants/api";
 import axios from "axios";
-import CreateCategoryModal from "./CategoryModal";
+import CreateCategoryModal from "./ProfileModal";
 import { Delete, Edit } from "@mui/icons-material";
 import { ToastContainer } from "react-toastify";
 import { toastAlertFail, toastAlertSuccess } from "../../utils/helperFn";
@@ -17,7 +17,7 @@ import AdminChat from "../../components/AdminChat";
 import MessageIcon from "@mui/icons-material/Message";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
-const Category = ({ setLoading }) => {
+const Profile = ({ setLoading }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [profiles, setProfiles] = useState([]);
@@ -274,4 +274,4 @@ const Category = ({ setLoading }) => {
     </>
   );
 };
-export default Category;
+export default Profile;

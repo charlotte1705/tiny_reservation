@@ -61,11 +61,9 @@ export default function CustomizedMenus() {
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const { isLoggedIn, role } = useAppContext();
-
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };

@@ -19,9 +19,14 @@ export const signIn = async (formData: SignInFormData) => {
   return body;
 };
 
+
+
+
 export const signInWithGoogle = async (tokenId: string) => {
+
   try {
-    const queryString = new URLSearchParams({ validateToken }).toString();
+
+    // const queryString = new URLSearchParams({ tokenId }).toString();
 
     const response = await fetch(`${API_BASE_URL}/api/auth/login/google`, {
       method: "POST",
@@ -29,10 +34,10 @@ export const signInWithGoogle = async (tokenId: string) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ validateToken: tokenId }),
+      body: JSON.stringify({ tokenId: tokenId }),
     });
-
     const body = await response.json();
+
 
     if (!response.ok) {
       throw new Error(body.message || "Failed to sign in with Google");

@@ -7,7 +7,7 @@ import authRoutes from "./routes/auth";
 import dashboardRoutes from "./routes/dashboard";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import {v2 as cloudinary} from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import path from "path";
 import myHotelRoutes from "./routes/my-hotels";
 import hotelRoutes from "./routes/hotels";
@@ -27,13 +27,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:3000','http://localhost:5174'],
+    origin: ['http://localhost:5173', 'http://localhost:3000'],
     credentials: true,
   })
 );
 
 app.get("/api/test", (req: Request, res: Response) => {
-    res.json({message: "hello from express endpoint!"});
+  res.json({ message: "hello from express endpoint!" });
 });
 
 
