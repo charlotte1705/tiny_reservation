@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import ManageHotelForm from "../forms/ManageHotelForm/ManageHotelForm";
 import { useAppContext } from "../contexts/AppContext";
 // import * as apiClient from "../api/signin_api";
@@ -6,10 +6,11 @@ import * as apiClient from "../api/api-client";
 
 const AddHotel = () => {
   const { showToast } = useAppContext();
-
+  const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(apiClient.addMyHotel, {
     onSuccess: () => {
       showToast({ message: "Hotel Saved!", type: "SUCCESS" });
+      queryClient.invalidateQueries("fetchMyHotels");
     },
     onError: () => {
       showToast({ message: "Error Saving Hotel", type: "ERROR" });

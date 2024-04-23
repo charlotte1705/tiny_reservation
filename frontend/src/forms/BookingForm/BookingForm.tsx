@@ -7,7 +7,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
 import { useSearchContext } from "../../contexts/SearchContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useAppContext } from "../../contexts/AppContext";
 import * as apiClient from "../../api/api-client";
 
@@ -32,6 +32,7 @@ export type BookingFormData = {
 };
 
 const BookingForm = ({ currentUser, paymentIntent }: Props) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -46,12 +47,14 @@ const BookingForm = ({ currentUser, paymentIntent }: Props) => {
     {
       onSuccess: () => {
         showToast({ message: "Booking Saved!", type: "SUCCESS" });
+        queryClient.invalidateQueries("fetchMyBookings");
       },
       onError: () => {
         showToast({ message: "Error saving booking", type: "ERROR" });
       },
     }
   );
+  
   // HANDLE PUSH EMAIL
   // const handlePushEmail = () => {
   //   // Implement your logic for pushing email here
