@@ -1,7 +1,7 @@
 import { hotelEmergency } from "../config/hotel-options-config";
 
 type Props = {
-  selectedEmergency: string[];
+  selectedEmergency: boolean[];
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -14,7 +14,7 @@ const Emergency = ({ selectedEmergency, onChange }: Props) => {
           <input
             type="checkbox"
             className="rounded"
-            value={emergency}
+            value={emergency.toString()}
             checked={selectedEmergency.includes(emergency)}
             onChange={onChange}
           />

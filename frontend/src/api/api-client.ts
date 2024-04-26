@@ -212,6 +212,20 @@ export const fetchMyBookings = async (): Promise<HotelType[]> => {
 
   return response.json();
 };
+
+
+export const checkOut = async (): Promise<HotelType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-bookings/checkout`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch bookings");
+  }
+
+  return response.json();
+};
+
 export const getUserData = async (_id: string): Promise<UserType> => {
   const response = await fetch(`${API_BASE_URL}/api/${_id}`);
   if (!response.ok) {

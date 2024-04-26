@@ -18,20 +18,20 @@ const EmergencySection = () => {
         {hotelEmergency.map((emergency) => (
           <label
             className={
-              emergencyWatch === emergency
+              String(emergencyWatch) === String(emergency)
                 ? "cursor-pointer bg-blue-300 text-sm rounded-full px-4 py-2 font-semibold"
                 : "cursor-pointer bg-gray-300 text-sm rounded-full px-4 py-2 font-semibold"
             }
           >
             <input
               type="radio"
-              value={emergency}
+              value={emergency.toString()} // Convert boolean value to string
               {...register("emergency", {
                 required: "This field is required",
               })}
               className="hidden"
             />
-            <span>{emergency}</span>
+            <span>{emergency ? "Yes" : "No"}</span>
           </label>
         ))}
       </div>

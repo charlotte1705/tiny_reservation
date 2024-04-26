@@ -56,7 +56,7 @@ router.post("/latestHistory", async (req: Request, res: Response) => {
       .limit(10)
     // .populate("name", "name")
     // .populate("userId", "firstName lastName");
-    console.log("🚀 ~ router.post ~ data:", bookingTrans)
+    // console.log("🚀 ~ router.post ~ data:", bookingTrans)
 
     if (!bookingTrans) {
       console.error("Error:", "not find any lastest history in system");
@@ -94,7 +94,7 @@ router.post("/info", async (req: Request, res: Response) => {
       bookingCount,
       bookingTrans
     };
-    console.log("🚀 ~ router.post ~ data:", data)
+    // console.log("🚀 ~ router.post ~ data:", data)
 
     if (!count) {
       console.error("Error:", "not find any hotel in system");

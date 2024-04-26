@@ -41,6 +41,7 @@ function App() {
   const location = useLocation();
   const classes = useStyles();
   const { signed, setSign } = useAuth();
+
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -52,6 +53,7 @@ function App() {
     } else {
       setIsSidebar(true);
     }
+    console.log("🚀 ~ App ~ signed:", signed)
   }, [location]);
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -85,72 +87,77 @@ function App() {
                 exact
                 element={<Login setLoading={setLoading} />}
               />
-              <Route
-                path="/team"
-                element={
-                  <PrivateRoute Component={<Team setLoading={setLoading} />} />
-                }
-              />
-              <Route
-                path="/dashboard"
-                exact
-                element={
-                  <PrivateRoute
-                    Component={<Dashboard setLoading={setLoading} />}
+              {signed && (
+                <>
+                  <Route
+                    path="/team"
+                    element={
+                      <PrivateRoute Component={<Team setLoading={setLoading} />} />
+                    }
                   />
-                }
-              />
+                  <Route
+                    path="/dashboard"
+                    exact
+                    element={
+                      <PrivateRoute
+                        Component={<Dashboard setLoading={setLoading} />}
+                      />
+                    }
+                  />
 
-              <Route
-                path="/history"
-                exact
-                element={
-                  <PrivateRoute
-                    Component={<History setLoading={setLoading} />}
+                  <Route
+                    path="/history"
+                    exact
+                    element={
+                      <PrivateRoute
+                        Component={<History setLoading={setLoading} />}
+                      />
+                    }
                   />
-                }
-              />
-              <Route
-                path="/invoice/:id"
-                exact
-                element={
-                  <PrivateRoute
-                    Component={<DetailInvoices setLoading={setLoading} />}
+                  <Route
+                    path="/invoice/:id"
+                    exact
+                    element={
+                      <PrivateRoute
+                        Component={<DetailInvoices setLoading={setLoading} />}
+                      />
+                    }
                   />
-                }
-              />
-              <Route
-                path="/profile"
-                exact
-                element={
-                  <PrivateRoute
-                    Component={<Profile setLoading={setLoading} />}
+                  <Route
+                    path="/profile"
+                    exact
+                    element={
+                      <PrivateRoute
+                        Component={<Profile setLoading={setLoading} />}
+                      />
+                    }
                   />
-                }
-              />
-              <Route
-                path="/room"
-                exact
-                element={
-                  <PrivateRoute Component={<Room setLoading={setLoading} />} />
-                }
-              />
-              <Route
-                path="/profile"
-                exact
-                element={
-                  <PrivateRoute
-                    Component={<Profile setLoading={setLoading} />}
+                  <Route
+                    path="/room"
+                    exact
+                    element={
+                      <PrivateRoute Component={<Room setLoading={setLoading} />} />
+                    }
                   />
-                }
-              />
-              <Route path="/form" exact element={<Form />} />
-              <Route path="/bar" exact element={<Bar />} />
-              <Route path="/pie" exact element={<Pie />} />
-              <Route path="/line" exact element={<Line />} />
-              <Route path="/faq" exact element={<FAQ />} />
-              <Route path="/calendar" exact element={<Calendar />} />
-              <Route path="/geography" exact element={<Geography />} />
+                  <Route
+                    path="/profile"
+                    exact
+                    element={
+                      <PrivateRoute
+                        Component={<Profile setLoading={setLoading} />}
+                      />
+                    }
+                  />
+                  <Route path="/form" exact element={<Form />} />
+                  <Route path="/bar" exact element={<Bar />} />
+                  <Route path="/pie" exact element={<Pie />} />
+                  <Route path="/line" exact element={<Line />} />
+                  <Route path="/faq" exact element={<FAQ />} />
+                  <Route path="/calendar" exact element={<Calendar />} />
+                  <Route path="/geography" exact element={<Geography />} />
+                </>
+              )}
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </main>
         </div>

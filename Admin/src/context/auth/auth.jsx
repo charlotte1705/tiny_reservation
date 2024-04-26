@@ -7,6 +7,11 @@ import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext();
 
+const getUser = () => {
+  const user = localStorage.getItem('userInfo');
+  return user ? JSON.parse(user) : null;
+}
+
 function setCookieMethod(name, value, days) {
   const expires = new Date(
     Date.now() + days * 24 * 60 * 60 * 1000
@@ -17,11 +22,15 @@ function setCookieMethod(name, value, days) {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState();
+  // const { data, isError } = useQuery("validateToken", getUser, {
+  //   retry: false,
+  // });
   useEffect(() => {
     async function loadStorageData() {
       const storageUser = localStorage.getItem('userInfo');
 
       if (storageUser) {
+        console.log("🚀 ~ loadStorageData ~ storageUser:", storageUser)
         setUser(JSON.parse(storageUser));
       }
       setLoading(false);
@@ -35,7 +44,6 @@ export const AuthProvider = ({ children }) => {
       .post(API.DASHBOARD, data, { withCredentials: true })
 
       .then((res) => {
-        console.log(res);
         if (res.data.data) {
           setUser(res.data.data.userInfo);
           setCookieMethod('accessToken', res.data.data.accessToken, 1);
@@ -59,13 +67,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const Logout = () => {
-    localStorage.clear();
+    localStorage.setItem('userInfo', null);
     setUser(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ signed: !!user, user, loading, Login, Logout }}
+      value={{ signed: localStorage.getItem('userInfo') ? true : false, user, loading, Login, Logout }}
     >
       {children}
     </AuthContext.Provider>

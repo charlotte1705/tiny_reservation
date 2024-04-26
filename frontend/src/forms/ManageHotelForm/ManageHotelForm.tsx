@@ -60,7 +60,6 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }: Props) => {
     formData.append("limit", formDataJson.limit.toString());
     formData.append("emergency", formDataJson.emergency.toString());
 
-
     formDataJson.facilities.forEach((facility, index) => {
       formData.append(`facilities[${index}]`, facility);
     });

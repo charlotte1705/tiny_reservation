@@ -48,7 +48,6 @@ export default function LoginBody() {
   });
   const submitLogin = async (data) => {
     try {
-      console.log(data);
       await Login(data, navigate);
     } catch (error) {
       if (error) {
