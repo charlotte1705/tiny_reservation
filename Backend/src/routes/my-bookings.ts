@@ -1,3 +1,11 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Bookings
+ *   description: Bookings related endpoints
+ */
+
+
 import express, { Request, Response } from "express";
 import verifyToken from "../middleware/auth";
 import Hotel from "../models/hotel";
@@ -5,7 +13,27 @@ import { HotelType } from "../shared/types";
 
 const router = express.Router();
 
-// /api/my-bookings
+/**
+ * @swagger
+ * /api/my-bookings:
+ *   get:
+ *     summary: Get user's bookings
+ *     description: Retrieve bookings made by the authenticated user
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user's bookings
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/HotelType'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/", verifyToken, async (req: Request, res: Response) => {
   try {
     const hotels = await Hotel.find({
@@ -35,6 +63,28 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/my-bookings/checkout:
+ *   get:
+ *     summary: Get user's check-out bookings
+ *     description: Retrieve bookings made by the authenticated user with check-out date after today
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user's check-out bookings
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/HotelType'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/checkout", verifyToken, async (req: Request, res: Response) => {
   try {
     const hotels = await Hotel.find({

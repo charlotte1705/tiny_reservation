@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management endpoints
+ */
+
 import express, { Request, Response } from "express";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
@@ -6,7 +13,25 @@ import verifyToken from "../middleware/auth";
 
 const router = express.Router();
 
-
+/**
+ * @swagger
+ * /api/users/me:
+ *   get:
+ *     summary: Get current user details
+ *     description: Retrieve details of the currently authenticated user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/me", verifyToken, async (req: Request, res: Response) => {
   const userId = req.userId;
 
@@ -23,6 +48,44 @@ router.get("/me", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/users/register:
+ *   post:
+ *     summary: Register a new user
+ *     description: Register a new user with first name, last name, email, and password
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '400':
+ *         description: Bad request, user already exists or validation error
+ *       '500':
+ *         description: Internal server error
+ */
 router.post(
   "/register",
   [

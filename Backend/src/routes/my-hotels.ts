@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Hotels
+ *   description: Hotel management endpoints
+ */
 import express, { Request, Response } from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
@@ -16,7 +22,57 @@ const upload = multer({
   },
 });
 
-//api/my-hotels
+/**
+ * @swagger
+ * /api/my-hotels:
+ *   post:
+ *     summary: Create a new hotel
+ *     description: Create a new hotel with images
+ *     tags: [Hotels]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               limit:
+ *                 type: number
+ *               emergency:
+ *                 type: string
+ *               pricePerNight:
+ *                 type: number
+ *               facilities:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               imageFiles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       '201':
+ *         description: Hotel created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HotelType'
+ *       '500':
+ *         description: Internal server error
+ */
 router.post(
   "/",
   verifyToken,
@@ -65,6 +121,27 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /api/my-hotels:
+ *   get:
+ *     summary: Get user's hotels
+ *     description: Retrieve hotels created by the authenticated user
+ *     tags: [Hotels]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user's hotels
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/HotelType'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/", verifyToken, async (req: Request, res: Response) => {
   try {
     const hotels = await Hotel.find({ userId: req.userId });
@@ -74,6 +151,32 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/my-hotels/{id}:
+ *   get:
+ *     summary: Get hotel by ID
+ *     description: Retrieve hotel details by ID for the authenticated user
+ *     tags: [Hotels]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the hotel to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved hotel
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HotelType'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/:id", verifyToken, async (req: Request, res: Response) => {
   // /api/my-hotels/id
   const id = req.params.id.toString();
@@ -88,6 +191,65 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/my-hotels/{hotelId}:
+ *   put:
+ *     summary: Update hotel details
+ *     description: Update hotel details by ID for the authenticated user
+ *     tags: [Hotels]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: hotelId
+ *         required: true
+ *         description: ID of the hotel to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               limit:
+ *                 type: number
+ *               emergency:
+ *                 type: string
+ *               pricePerNight:
+ *                 type: number
+ *               facilities:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               imageFiles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       '201':
+ *         description: Hotel updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HotelType'
+ *       '500':
+ *         description: Internal server error
+ */
 router.put(
   "/:hotelId",
   verifyToken,

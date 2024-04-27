@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: Authentication endpoints
+ */
+
 import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
 import User from "../models/user";
@@ -9,6 +16,32 @@ import { OAuth2Client } from "google-auth-library";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/auth/admin:
+ *   post:
+ *     summary: Authenticate admin
+ *     description: Authenticate admin using email and password
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Admin authenticated successfully
+ *       '400':
+ *         description: Invalid credentials
+ *       '500':
+ *         description: Internal server error
+ */
 router.post(
   "/admin",
   [
@@ -58,6 +91,30 @@ router.post(
 );
 
 
+/**
+ * @swagger
+ * /api/auth/login/google:
+ *   post:
+ *     summary: Authenticate user with Google
+ *     description: Authenticate user using Google OAuth2 token
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tokenId:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: User authenticated successfully with Google
+ *       '400':
+ *         description: Invalid Google token payload
+ *       '500':
+ *         description: Google login failed
+ */
 router.post("/login/google", async (req: Request, res: Response) => {
   const { tokenId } = req.body;
 
@@ -115,6 +172,32 @@ router.post("/login/google", async (req: Request, res: Response) => {
 });
 
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Authenticate user
+ *     description: Authenticate user using email and password
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: User authenticated successfully
+ *       '400':
+ *         description: Invalid credentials
+ *       '500':
+ *         description: Internal server error
+ */
 router.post(
   "/login",
   [
@@ -163,6 +246,22 @@ router.post(
   }
 );
 
+
+/**
+ * @swagger
+ * /api/auth/validate-token:
+ *   get:
+ *     summary: Validate token
+ *     description: Validate user token
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Token is valid
+ *       '400':
+ *         description: User not found
+ */
 router.get(
   "/validate-token",
   verifyToken,
@@ -174,6 +273,8 @@ router.get(
     res.status(200).send({ role: user.role });
   }
 );
+
+
 
 router.post("/logout", (req: Request, res: Response) => {
   res.cookie("auth_token", "", {

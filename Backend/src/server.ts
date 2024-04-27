@@ -12,6 +12,11 @@ import path from "path";
 import myHotelRoutes from "./routes/my-hotels";
 import hotelRoutes from "./routes/hotels";
 import bookingRoutes from "./routes/my-bookings";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
+
+
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -44,9 +49,41 @@ app.use("/api/hotels", hotelRoutes);
 app.use("/dashboard", dashboardRoutes)
 app.use("/api/my-bookings", bookingRoutes);
 
-app.get("*", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
-});
+// Swagger configuration
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Your API",
+      version: "1.0.0",
+      description: "API Documentation",
+    },
+    servers: [
+      {
+        url: "http://localhost:7000",
+        description: "Development server",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
+  },
+  apis: ["./src/routes/*.ts"], // Adjust the path according to your directory structure
+};
+
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+// app.get("*", (req: Request, res: Response) => {
+//   res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+// });
 
 app.listen(7000, () => {
   console.log("server running on localhost:7000");

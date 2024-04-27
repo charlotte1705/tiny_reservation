@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Hotels
+ *   description: Hotel related endpoints
+ */
+
 import express, { Request, Response } from "express";
 import Hotel from "../models/hotel";
 import History from "../models/history";
@@ -10,6 +17,71 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 
 const router = express.Router();
 
+
+/**
+ * @swagger
+ * /api/hotels/search:
+ *   get:
+ *     summary: Search hotels
+ *     description: Search for hotels based on various criteria
+ *     tags: [Hotels]
+ *     parameters:
+ *       - in: query
+ *         name: destination
+ *         schema:
+ *           type: string
+ *         description: Destination city or country
+ *       - in: query
+ *         name: adultCount
+ *         schema:
+ *           type: integer
+ *         description: Number of adults
+ *       - in: query
+ *         name: childCount
+ *         schema:
+ *           type: integer
+ *         description: Number of children
+ *       - in: query
+ *         name: facilities
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Array of required facilities
+ *       - in: query
+ *         name: types
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Array of hotel types
+ *       - in: query
+ *         name: stars
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: integer
+ *         description: Array of hotel star ratings
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: integer
+ *         description: Maximum price per night
+ *       - in: query
+ *         name: sortOption
+ *         schema:
+ *           type: string
+ *         description: Sorting option
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved hotels
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HotelSearchResponse'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/search", async (req: Request, res: Response) => {
   try {
     const query = constructSearchQuery(req.query);
@@ -57,6 +129,26 @@ router.get("/search", async (req: Request, res: Response) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/hotels:
+ *   get:
+ *     summary: Get all hotels
+ *     description: Retrieve all approved hotels
+ *     tags: [Hotels]
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved hotels
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Hotel'
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/", async (req: Request, res: Response) => {
   try {
     const hotels = await Hotel.find({ status: "approve" }).sort("-lastUpdated");
@@ -67,6 +159,35 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/hotels/{id}:
+ *   get:
+ *     summary: Get hotel by ID
+ *     description: Retrieve a hotel by its ID
+ *     tags: [Hotels]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Hotel ID
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved the hotel
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Hotel'
+ *       '400':
+ *         description: Invalid hotel ID
+ *       '404':
+ *         description: Hotel not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get(
   "/:id",
   [param("id").notEmpty().withMessage("Hotel ID is required")],
@@ -80,7 +201,7 @@ router.get(
 
     try {
       const hotel = await Hotel.findById(id);
-      console.log("🚀 ~ hotel:", hotel)
+      console.log("🚀 ~ hotellll:", hotel)
       if (!hotel) {
         return res.status(404).json({ message: "Hotel not found" });
       }
@@ -92,6 +213,51 @@ router.get(
   }
 );
 
+
+/**
+ * @swagger
+ * /api/hotels/{hotelId}/bookings/payment-intent:
+ *   post:
+ *     summary: Create payment intent for hotel booking
+ *     description: Create a payment intent for booking a hotel
+ *     tags: [Hotels]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: hotelId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Hotel ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               numberOfNights:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Payment intent created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 paymentIntentId:
+ *                   type: string
+ *                 clientSecret:
+ *                   type: string
+ *                 totalCost:
+ *                   type: number
+ *       '400':
+ *         description: Invalid request or hotel not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post(
   "/:hotelId/bookings/payment-intent",
   verifyToken,
@@ -131,6 +297,40 @@ router.post(
   }
 );
 
+
+/**
+ * @swagger
+ * /api/hotels/{hotelId}/bookings:
+ *   post:
+ *     summary: Book a hotel
+ *     description: Book a hotel after creating a payment intent
+ *     tags: [Hotels]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: hotelId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Hotel ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               paymentIntentId:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Hotel booked successfully
+ *       '400':
+ *         description: Invalid request or payment intent mismatch
+ *       '500':
+ *         description: Internal server error
+ */
 router.post(
   "/:hotelId/bookings",
   verifyToken,
