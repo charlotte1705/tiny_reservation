@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { fetchMyBookings, checkOut } from "../api/api-client";
-import { useMutation, useQueryClient } from "react-query";
+// import { useMutation, useQueryClient } from "react-query";
 
 const MyBookings = () => {
   const { data: hotels } = useQuery(
