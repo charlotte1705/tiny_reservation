@@ -245,7 +245,7 @@ const Room = ({ setLoading }) => {
   ];
   return (
     <Box m="20px">
-      <Header title="Room" subtitle="List of Rooms" />
+      <Header title="Hotels" subtitle="List of Hotels" />
       <Box
         m="40px 0 0 0"
         height="75vh"

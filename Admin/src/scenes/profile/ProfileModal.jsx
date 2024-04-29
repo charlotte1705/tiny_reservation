@@ -159,7 +159,7 @@ function CreateCategoryModal({
 
       {type === "edit" && selectedRow && (
         <Dialog open={open} onClose={() => onClose()}>
-          <DialogTitle>Update Category</DialogTitle>
+          <DialogTitle>Update Profile</DialogTitle>
           <DialogContent>
             <form onSubmit={handleUpdate} id="my-form">
               <Box
@@ -214,6 +214,15 @@ function CreateCategoryModal({
                 </Box>
               </Box>
               <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="email"
+                    label="email"
+                    value={formFields ? formFields.email : null}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     name="firstName"

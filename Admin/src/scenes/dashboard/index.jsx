@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
@@ -13,46 +12,35 @@ import GeographyChart from "../../components/GeographyChart";
 import StatBox from "../../components/StatBox";
 import * as API from '../../constants/api';
 import axios from 'axios';
+
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [hotelData, setHotelData] = useState({});
   const [latestHistory, setLatestHistory] = useState([]);
-  // get all hotels by category
+
   useEffect(() => {
-    axios
-      .post(`${API.GET_INFO}`)
+    axios.post(API.GET_INFO)
       .then((res) => {
         if (res.data) {
-          setHotelData(res.data.result)
-          console.log("🚀 ~ .then ~ res.data:", hotelData)
+          setHotelData(res.data.result);
         }
       })
       .catch((error) => {
-        console.log(
-          '🚀 ~ file: room-body.component.jsx ~ line 124 ~ handleSubmitRoom ~ error',
-          error
-        );
+        console.log('Error fetching hotel data:', error);
       });
-    axios
-      .post(`${API.GET_LATEST_HISTORY}`)
+
+    axios.post(API.GET_LATEST_HISTORY)
       .then((res) => {
         if (res.data) {
-          setLatestHistory(res.data.result)
-          console.log("🚀 ~ .then ~ lastesthistory:", latestHistory)
+          setLatestHistory(res.data.result);
         }
       })
       .catch((error) => {
-        console.log(
-          '🚀 ~ file: room-body.component.jsx ~ line 124 ~ handleSubmitRoom ~ error',
-          error
-        );
+        console.log('Error fetching latest history:', error);
       });
   }, []);
-  useEffect(() => {
-    console.log("lastestHistory", latestHistory, hotelData)
-  }
-    , [hotelData, latestHistory])
+
   return (
     <Box m="20px">
       {/* HEADER */}
@@ -81,10 +69,11 @@ const Dashboard = () => {
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="140px"
         gap="20px"
+        mt="20px"
       >
-        {/* ROW 1 */}
+        {/* Stat boxes */}
         <Box
-          gridColumn="span 3"
+          gridColumn={{ xs: "span 12", sm: "span 6", md: "span 3" }}
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -94,15 +83,11 @@ const Dashboard = () => {
             title={hotelData.count}
             subtitle="Hotels"
             progress="1"
-            icon={
-              <EmailIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            icon={<EmailIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
           />
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn={{ xs: "span 12", sm: "span 6", md: "span 3" }}
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -112,15 +97,11 @@ const Dashboard = () => {
             title={hotelData.sale}
             subtitle="Email Submissions"
             progress="1"
-            icon={
-              <PointOfSaleIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            icon={<PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
           />
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn={{ xs: "span 12", sm: "span 6", md: "span 3" }}
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -130,15 +111,11 @@ const Dashboard = () => {
             title={hotelData.userCount}
             subtitle="New Clients"
             progress="1"
-            icon={
-              <PersonAddIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            icon={<PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
           />
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn={{ xs: "span 12", sm: "span 6", md: "span 3" }}
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -148,28 +125,19 @@ const Dashboard = () => {
             title={hotelData.bookingCount}
             subtitle="Bookings Complete"
             progress="1"
-            icon={
-              <TrafficIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
+            icon={<TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
           />
         </Box>
 
+        {/* Recent transactions */}
         <Box
-          gridColumn="span 8"
-          gridRow="span 2"
+          gridColumn={{ xs: "span 12", sm: "span 12", md: "span 6" }}
+          gridRow={{ xs: "span 2", sm: "span 1", md: "span 2" }}
           backgroundColor={colors.primary[400]}
           overflow="auto"
+          p="20px"
         >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            borderBottom={`4px solid ${colors.primary[500]}`}
-            colors={colors.grey[100]}
-            p="15px"
-          >
+          <Box borderBottom={`4px solid ${colors.primary[500]}`} mb="10px">
             <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
               Recent Transactions
             </Typography>
@@ -180,14 +148,15 @@ const Dashboard = () => {
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              p="15px"
+              borderBottom={`1px solid ${colors.primary[500]}`}
+              py="10px"
             >
-              <Box>
+              <Box flex="1">
                 <Typography
                   color={colors.greenAccent[500]}
                   variant="h5"
                   fontWeight="600"
+                  sx={{ marginBottom: "5px" }}
                 >
                   {transaction._id}
                 </Typography>
@@ -195,20 +164,28 @@ const Dashboard = () => {
                   {transaction.firstName} {transaction.lastName}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.checkOut}</Box>
-              <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
-              >
-                ${transaction.totalCost}
+              <Box flex="1" textAlign="right">
+                <Typography color={colors.grey[100]} fontWeight="600">
+                  {transaction.checkOut}
+                </Typography>
+                <Box
+                  backgroundColor={colors.greenAccent[500]}
+                  color={colors.grey[100]}
+                  p="3px 10px"
+                  borderRadius="4px"
+                  display="inline-block"
+                >
+                  ${transaction.totalCost}
+                </Box>
               </Box>
             </Box>
           ))}
         </Box>
+
+        {/* Geography chart */}
         <Box
-          gridColumn="span 4"
-          gridRow="span 2"
+          gridColumn={{ xs: "span 12", sm: "span 12", md: "span 6" }}
+          gridRow={{ xs: "span 2", sm: "span 1", md: "span 2" }}
           backgroundColor={colors.primary[400]}
           padding="30px"
         >

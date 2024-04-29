@@ -41,26 +41,6 @@ const History = ({ setLoading }) => {
     setModal(false);
   };
 
-  // HANDLE PUSH EMERGENCY
-  const handleModalOpen = () => {
-    const type = !isEmergency;
-    setIsEmergency(type);
-    setEmergencyButtonLabel(type ? "Push Normal" : "Push Emergency");
-    axios
-      .put(`${API.GET_EMERGENCY}`, { "emergency": type })
-      .then((res) => {
-        if (res.data) {
-          setBookings(res.data);
-        }
-      })
-      .catch((error) => {
-        console.log(
-          '🚀 ~ file: Booking-body.component.jsx ~ line 124 ~ handleSubmitBooking ~ error',
-          error
-        );
-      });
-  };
-
 
   // get all hotels by category
   useEffect(() => {
@@ -227,7 +207,7 @@ const History = ({ setLoading }) => {
   ];
   return (
     <Box m="20px">
-      <Header title="Room" subtitle="List of Rooms" />
+      <Header title="Booking History" subtitle="List of Booking Paymens" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -261,24 +241,8 @@ const History = ({ setLoading }) => {
         }}
       >
         <Box display="flex" justifyContent="end" mt="20px">
-          <Button
-            type="submit"
-            color="secondary"
-            variant="contained"
-            onClick={() => handleModalOpen()}
-          >
-            {emergencyButtonLabel}
-          </Button>
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            onClick={() => handlePushEmail()}
-            style={{ marginLeft: '10px' }}
-          >
-            {/* {emailButtonLabel} */}
-            Push Email
-          </Button>
+
+
         </Box>
         <BookingModal
           type={typeModal}
