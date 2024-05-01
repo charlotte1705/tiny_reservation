@@ -151,6 +151,16 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+
+router.get("/history-bookings", verifyToken, async (req: Request, res: Response) => {
+  try {
+    const hotels = await Hotel.find({ userId: req.userId });
+    res.json(hotels);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching hotels" });
+  }
+});
+
 /**
  * @swagger
  * /api/my-hotels/{id}:

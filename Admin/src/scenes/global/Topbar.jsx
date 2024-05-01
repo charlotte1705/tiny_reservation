@@ -4,30 +4,22 @@ import { ColorModeContext, tokens } from '../../theme';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SearchIcon from '@mui/icons-material/Search';
-import { Link as RouterLink } from 'react-router-dom';
-import React, { useState } from 'react';
-import Notification from './Notification';
+import React from 'react';
+import { useAuth } from "../../context/auth/auth";
+import { useNavigate } from 'react-router-dom';
 
 const Topbar = () => {
+  const navigate = useNavigate();
+  const { Logout } = useAuth();
+
+  const handleOnclick = () => {
+    Logout(navigate)
+  };
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const notificationData = {
-    userAvatar: 'https://source.unsplash.com/random',
-    message: 'Room 312',
-    timestamp: '1 hour ago',
-  };
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
@@ -51,15 +43,9 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton onClick={handleClick}>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        {/* <Notification /> */}
-        <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton component={RouterLink} to="/profile">
-          <PersonOutlinedIcon />
+
+        <IconButton onClick={handleOnclick}>
+          <ExitToAppIcon />
         </IconButton>
       </Box>
     </Box>

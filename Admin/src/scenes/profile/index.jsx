@@ -211,16 +211,6 @@ const Profile = ({ setLoading }) => {
             },
           }}
         >
-          {/* <Box display="flex" justifyContent="end" mt="20px">
-            <Button
-              type="submit"
-              color="secondary"
-              variant="contained"
-              onClick={() => handleModalOpen('create')}
-            >
-              Create New Category
-            </Button>
-          </Box> */}
           <CreateCategoryModal
             type={typeModal}
             open={isModal}

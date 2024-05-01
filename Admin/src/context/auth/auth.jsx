@@ -1,11 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { navigate } from 'react-router-dom';
 import * as API from '../../constants/api';
 import { toastAlertFail } from '../../utils/helperFn';
-import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext();
+
 
 const getUser = () => {
   const user = localStorage.getItem('userInfo');
@@ -66,9 +65,11 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
-  const Logout = () => {
+  const Logout = (navigate) => {
     localStorage.setItem('userInfo', null);
+    console.log("🚀 ~ Logout ~ localStorage.getItem('userInfo')", localStorage.getItem('userInfo'));
     setUser(null);
+    navigate('/');
   };
 
   return (

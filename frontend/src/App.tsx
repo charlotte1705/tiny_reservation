@@ -15,6 +15,7 @@ import MyBookings from "./pages/MyBookings";
 import AboutUs from "./components/AboutUs"
 import ContactUs from "./pages/ContactUs";
 import Profile from "./pages/Profile";
+import HistoryBooking from "./pages/HistoryBooking";
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -113,6 +114,14 @@ const App = () => {
                 element={
                   <Layout>
                     <MyHotels />
+                  </Layout>
+                }
+              />
+               <Route
+                path="/history-booking"
+                element={
+                  <Layout>
+                    <HistoryBooking />
                   </Layout>
                 }
               />

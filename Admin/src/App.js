@@ -5,10 +5,7 @@ import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Team from "./scenes/team";
 import History from "./scenes/invoices";
-import Bar from "./scenes/bar";
 import Form from "./scenes/form";
-import Line from "./scenes/line";
-import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -17,7 +14,6 @@ import Calendar from "./scenes/calendar/calendar";
 import Profile from "./scenes/profile";
 import Room from "./scenes/room";
 import Login from "./scenes/login";
-import Signup from "./scenes/signup";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAuth } from "./context/auth/auth";
 import PrivateRoute from "./utils/PrivateRoute";
@@ -149,9 +145,6 @@ function App() {
                     }
                   />
                   <Route path="/form" exact element={<Form />} />
-                  <Route path="/bar" exact element={<Bar />} />
-                  <Route path="/pie" exact element={<Pie />} />
-                  <Route path="/line" exact element={<Line />} />
                   <Route path="/faq" exact element={<FAQ />} />
                   <Route path="/calendar" exact element={<Calendar />} />
                   <Route path="/geography" exact element={<Geography />} />

@@ -116,15 +116,27 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 )}
                 {role !== "user" && (
-                    <MenuItem
-                        onClick={handleClose}
-                        disableRipple
-                        component={Link} // Use Link component from react-router-dom
-                        to="/my-hotels" // Specify the target link
-                    >
-                        <FileCopyIcon />
-                        My Hotel
-                    </MenuItem>
+                    <>
+                        <MenuItem
+                            onClick={handleClose}
+                            disableRipple
+                            component={Link} // Use Link component from react-router-dom
+                            to="/my-hotels" // Specify the target link
+                        >
+                            <FileCopyIcon />
+                            My Hotel
+                        </MenuItem>
+                        <MenuItem
+                            onClick={handleClose}
+                            disableRipple
+                            component={Link} // Use Link component from react-router-dom
+                            to="/history-booking" // Specify the target link
+                        >
+                            <FileCopyIcon />
+                            History Booking
+                        </MenuItem>
+                    </>
+
                 )}
                 <Divider sx={{ my: 0.5 }} />
                 {isLoggedIn && (

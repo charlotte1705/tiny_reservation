@@ -26,9 +26,7 @@ const EmergencySection = () => {
             <input
               type="radio"
               value={emergency.toString()} // Convert boolean value to string
-              {...register("emergency", {
-                required: "This field is required",
-              })}
+              {...register("emergency")}
               className="hidden"
             />
             <span>{emergency ? "Yes" : "No"}</span>
