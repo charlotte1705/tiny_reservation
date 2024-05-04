@@ -117,7 +117,7 @@ const App = () => {
                   </Layout>
                 }
               />
-               <Route
+              <Route
                 path="/history-booking"
                 element={
                   <Layout>
@@ -137,7 +137,7 @@ const App = () => {
                 path="/my-profile"
                 element={
                   <Layout>
-                    <Profile /> 
+                    <Profile />
                   </Layout>
                 }
               />

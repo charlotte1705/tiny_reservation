@@ -7,7 +7,7 @@ type Props = {
 
 const LatestDestinationCard = ({ hotel }: Props) => {
   return (
-    <div className="max-w-md ">
+    <div className="min-w-md ">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <Link
           to={`/detail/${hotel._id}`}

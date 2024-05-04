@@ -100,6 +100,7 @@ export default function CustomizedMenus() {
                     disableRipple
                     component={Link} // Use Link component from react-router-dom
                     to="/my-profile" // Specify the target link
+                    style={{ color: 'inherit' }} // Set the text color to inherit
                 >
                     <EditIcon />
                     Profile

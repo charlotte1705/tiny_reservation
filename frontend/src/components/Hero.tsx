@@ -1,46 +1,32 @@
-// import React from "react";
-// import heroImage1 from '../assets/hero/hero-1.jpg';
-// import heroImage2 from '../assets/hero/hero-2.jpg';
+import React from "react";
 import heroImage3 from '../assets/hero/hero-3.jpg';
-// import SearchBar from "./SearchBar";
 
 const Hero = () => {
   return (
     <div
-      className="bg-gray-300 py-10 flex items-center justify-center"
+      className="bg-gray-300 py-10 sm:py-20 flex items-center justify-center"
       style={{
         backgroundImage: `url(${heroImage3})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '650px'
+        height: '650px',
+        minHeight: '300px' // Add a minimum height for smaller screens
       }}
     >
-      <div className="container mx-auto text-center text-white">
-        <h1 className="text-5xl font-bold mb-4">
-          Find your next stay
-        </h1>
-        <p className="text-2xl mb-8">
-          Search low prices on hotels for your dream vacation...
-        </p>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Explore Now
-        </button>
+      <div className="container mx-auto text-center text-white flex flex-col justify-center items-center sm:text-left">
+        <div className="w-80"> 
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            Find your next stay
+          </h1>
+          <p className="text-base sm:text-lg lg:text-xl mb-8">
+            Search low prices on hotels for your dream vacation...
+          </p>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded">
+            Explore Now
+          </button>
+        </div>
       </div>
     </div>
-
-
-    // <div className="hero-section relative w-full h-auto bg-cover bg-center" style={{ backgroundImage: `url(${heroImage1})`, paddingTop: '200px', paddingBottom: '200px' }}>
-    //   <div className="container mx-auto">
-    //     <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-    //       <div className="hero-text">
-    //         <h1 className="text-4xl md:text-5xl lg:text-6xl text-white font-bold mb-8">Sona A Luxury Hotel</h1>
-    //         <p className="text-lg text-white mb-8">Here are the best hotel booking sites, including recommendations for international travel and for finding low-priced hotel rooms.</p>
-    //         <a href="#" className="primary-btn">Discover Now</a>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
   );
 };
 

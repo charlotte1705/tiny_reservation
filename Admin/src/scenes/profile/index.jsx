@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import * as API from "../../constants/api";
 import axios from "axios";
 import CreateCategoryModal from "./ProfileModal";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Padding } from "@mui/icons-material";
 import { ToastContainer } from "react-toastify";
 import { toastAlertFail, toastAlertSuccess } from "../../utils/helperFn";
 import "react-toastify/dist/ReactToastify.css";
@@ -148,8 +148,8 @@ const Profile = ({ setLoading }) => {
     },
     {
       headerName: "Actions",
-      width: 100,
-      flex: 1,
+      width: 120,
+
       renderCell: (params) => {
         return (
           <>

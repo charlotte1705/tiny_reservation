@@ -171,7 +171,7 @@ const Dashboard = () => {
         <Box
           gridColumn={{ xs: "span 12", sm: "span 12", md: "span 6" }}
           gridRow={{ xs: "span 2", sm: "span 1", md: "span 2" }}
-          backgroundColor={colors.primary[400]}
+
           padding="30px"
         >
           <Typography

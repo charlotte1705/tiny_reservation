@@ -53,8 +53,8 @@ const Header = () => {
                       </li>
 
 
-                      <li className={activeLink === '/rooms' ? 'active' : ''}>
-                        <Link to="/rooms" className="no-underline" onClick={() => handleLinkClick('/rooms')}>
+                      <li className={`no-underline ${activeLink === '/rooms' ? 'active' : ''}`}>
+                        <Link to="/rooms" className="no-underline underline-none" onClick={() => handleLinkClick('/rooms')}>
                           Rooms
                         </Link>
                       </li>

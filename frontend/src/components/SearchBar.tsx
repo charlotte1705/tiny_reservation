@@ -1,11 +1,99 @@
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
+const MobileSearchForm = ({ onSubmit }: { onSubmit: () => void }) => {
+  const [destination, setDestination] = useState<string>("");
+  const [checkIn, setCheckIn] = useState<Date | null>(null);
+  const [checkOut, setCheckOut] = useState<Date | null>(null);
+  const [adultCount, setAdultCount] = useState<number>(1);
+  const [childCount, setChildCount] = useState<number>(0);
+
+  const minDate = new Date();
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 1);
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+      className="bg-gray-300 p-4 rounded shadow-md w-96 mt-4 md:w-96 mx-auto" // Adjusted width to w-full md:w-96
+    >
+      <div className="flex items-center bg-white p-2 border border-gray-400 rounded transition duration-300 hover:border-black">
+        <MdTravelExplore size={25} className="mr-2" />
+        <input
+          placeholder="Where are you going?"
+          className="text-md w-full focus:outline-none border-none"
+          value={destination}
+          onChange={(event) => setDestination(event.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col bg-white p-2 gap-2 border border-gray-400 rounded transition duration-300 hover:border-black">
+        <label className="items-center flex">
+          Adults:
+          <input
+            className="w-full p-1 focus:outline-none font-bold border-none"
+            type="number"
+            min={1}
+            max={20}
+            value={adultCount}
+            onChange={(event) => setAdultCount(parseInt(event.target.value))}
+          />
+        </label>
+        <label className="items-center flex">
+          Children:
+          <input
+            className="w-full p-1 focus:outline-none font-bold border-none"
+            type="number"
+            min={0}
+            max={20}
+            value={childCount}
+            onChange={(event) => setChildCount(parseInt(event.target.value))}
+          />
+        </label>
+      </div>
+      <div className="border border-gray-400 rounded transition duration-300 hover:border-black">
+        <DatePicker
+          selected={checkIn}
+          onChange={(date) => setCheckIn(date as Date)}
+          selectsStart
+          startDate={checkIn}
+          endDate={checkOut}
+          minDate={minDate}
+          maxDate={maxDate}
+          placeholderText="Check-in Date"
+          className="w-full bg-white p-2 focus:outline-none border-none"
+        />
+      </div>
+      <div className="border border-gray-400 rounded transition duration-300 hover:border-black">
+        <DatePicker
+          selected={checkOut}
+          onChange={(date) => setCheckOut(date as Date)}
+          selectsStart
+          startDate={checkIn}
+          endDate={checkOut}
+          minDate={minDate}
+          maxDate={maxDate}
+          placeholderText="Check-out Date"
+          className="w-full bg-white p-2 focus:outline-none border-none"
+        />
+      </div>
+      <button className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-blue-700">
+        Search
+      </button>
+    </form>
+  );
+
+};
+
+
+const DesktopSearchBar = () => {
   const navigate = useNavigate();
   const search = useSearchContext();
 
@@ -22,7 +110,7 @@ const SearchBar = () => {
       checkIn,
       checkOut,
       adultCount,
-      childCount,
+      childCount
     );
     navigate("/search");
   };
@@ -108,6 +196,28 @@ const SearchBar = () => {
         </button>
       </div>
     </form>
+  );
+};
+
+const SearchBar = () => {
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth < 768 // Change to the breakpoint of your choice
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Change to the breakpoint of your choice
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isMobile ? (
+    <MobileSearchForm onSubmit={() => { }} />
+  ) : (
+    <DesktopSearchBar />
   );
 };
 
