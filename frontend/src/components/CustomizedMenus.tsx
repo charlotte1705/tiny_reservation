@@ -7,12 +7,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
 // import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import LogoutIcon from '@mui/icons-material/Logout';
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppContext } from "../contexts/AppContext";
 import SignOutButton from './SignOutButton'; // Import SignOutButton component
+
 // import MyBookings from '../pages/MyBookings';
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -34,7 +36,7 @@ const StyledMenu = styled((props: MenuProps) => (
         marginTop: theme.spacing(1),
         minWidth: 180,
         color:
-            theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+            theme.palette.mode === 'light' ? '  ' : theme.palette.grey[300],
         boxShadow:
             'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
         '& .MuiMenu-list': {
@@ -102,8 +104,7 @@ export default function CustomizedMenus() {
                     to="/my-profile" // Specify the target link
                     style={{ color: 'inherit' }} // Set the text color to inherit
                 >
-                    <EditIcon />
-                    Profile
+                    <div><EditIcon /> Profile </div>
                 </MenuItem>
                 {role === "user" && (
                     <MenuItem
@@ -112,8 +113,7 @@ export default function CustomizedMenus() {
                         component={Link} // Use Link component from react-router-dom
                         to="/my-bookings" // Specify the target link
                     >
-                        <FileCopyIcon />
-                        My Booking
+                        <div><FileCopyIcon /> My Booking</div>
                     </MenuItem>
                 )}
                 {role !== "user" && (
@@ -142,7 +142,8 @@ export default function CustomizedMenus() {
                 <Divider sx={{ my: 0.5 }} />
                 {isLoggedIn && (
                     <MenuItem onClick={handleLogout} disableRipple>
-                        <SignOutButton /> {/* Add SignOutButton component */}
+                        <LogoutIcon />
+                            <SignOutButton /> {/* Add SignOutButton component */}
                     </MenuItem>
                 )}
             </StyledMenu>

@@ -7,6 +7,7 @@ type SearchContext = {
   adultCount: number;
   childCount: number;
   hotelId: string;
+  limit: number;
   saveSearchValues: (
     destination: string,
     checkIn: Date,

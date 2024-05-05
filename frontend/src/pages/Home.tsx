@@ -5,18 +5,27 @@ import LatestDestinationCard from "../components/LatestDestinationCard";
 import TalkJSChat from "../components/TalkJSChat";
 import { MessageOutlined } from "@ant-design/icons";
 import AboutUs from "../components/AboutUs";
+import Pagination from "../components/Pagination"; // Import Pagination component
 
 const Home = () => {
   const [toggleChatBox, setToggleChatBox] = useState(false);
+  const [bottomPage, setBottomPage] = useState(1); // State for managing current page for bottom row
 
   const { data: hotels } = useQuery("fetchQuery", () =>
     apiClient.fetchHotels()
-  );  
+  );
 
   const handleToggleChatBox = () => setToggleChatBox(!toggleChatBox);
 
+  // Logic for pagination
+  const bottomPageSize = 6; // Number of hotels per page for bottom row
+  const bottomStartIndex = (bottomPage - 1) * bottomPageSize;
+  const bottomRowHotels = hotels?.slice(2) || []; // Original declaration
+
+  const visibleBottomHotels = bottomRowHotels.slice(bottomStartIndex, bottomStartIndex + bottomPageSize) || [];
+
+  // Slice the first 2 hotels for top row
   const topRowHotels = hotels?.slice(0, 2) || [];
-  const bottomRowHotels = hotels?.slice(2) || [];
 
   return (
     <div className="space">
@@ -28,12 +37,21 @@ const Home = () => {
             <LatestDestinationCard key={index} hotel={hotel} />
           ))}
         </div>
-        <p>Latest estinations added by our hosts</p>
+        {/* No pagination needed for top row */}
+        <p>Latest destinations added by our hosts</p>
         <div className="grid md:grid-cols-3 gap-4">
-          {bottomRowHotels.map((hotel, index) => (
+          {visibleBottomHotels.map((hotel, index) => (
             <LatestDestinationCard key={index} hotel={hotel} />
           ))}
         </div>
+        {/* Display pagination for bottom row if there are more hotels */}
+        {bottomRowHotels.length > bottomPageSize && (
+          <Pagination
+            page={bottomPage}
+            pages={Math.ceil(bottomRowHotels.length / bottomPageSize)}
+            onPageChange={(newPage) => setBottomPage(newPage)}
+          />
+        )}
       </div>
       <AboutUs />
       <button

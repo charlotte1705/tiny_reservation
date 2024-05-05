@@ -9,6 +9,7 @@
 import express, { Request, Response } from "express";
 import verifyToken from "../middleware/auth";
 import Hotel from "../models/hotel";
+import History from "../models/history";
 import { HotelType } from "../shared/types";
 
 const router = express.Router();
@@ -54,7 +55,6 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
 
       return hotelWithUserBookings;
     });
-    // add booking to history
 
     res.status(200).send(results);
   } catch (error) {
@@ -85,29 +85,32 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
  *       '500':
  *         description: Internal server error
  */
-router.get("/checkout", verifyToken, async (req: Request, res: Response) => {
+router.get("/checkout/:hotel_id", verifyToken, async (req: Request, res: Response) => {
   try {
-    const hotels = await Hotel.find({
-      bookings: {
-        $elemMatch: { userId: req.userId, checkOut: { $gte: new Date() } },
-      }
-    });
+    // const hotels = await Hotel.find({
+    //   bookings: {
+    //     $elemMatch: { userId: req.userId, checkOut: { $gte: new Date() } },
+    //   }
+    // });
 
-    const results = hotels.map((hotel) => {
-      const userBookings = hotel.bookings.filter(
-        (booking) => booking.userId === req.userId
-      );
+    // const results = hotels.map((hotel) => {
+    //   const userBookings = hotel.bookings.filter(
+    //     (booking) => booking.userId === req.userId
+    //   );
 
-      const hotelWithUserBookings: HotelType = {
-        ...hotel.toObject(),
-        bookings: userBookings,
-      };
+    //   const hotelWithUserBookings: HotelType = {
+    //     ...hotel.toObject(),
+    //     bookings: userBookings,
+    //   };
 
-      return hotelWithUserBookings;
-    });
-    // add booking to history
-
-    res.status(200).send(results);
+    //   return hotelWithUserBookings;
+    // });
+    const hotelId = req.params.hotel_id;
+    const hotel = await Hotel.updateMany({ _id: hotelId }, { $inc: { limit: 1 } });
+    if (!hotel) {
+      return res.status(400).json({ statusMessage: "Error occured when checkout" });
+    }
+    res.status(200).send({ statusMessage: "Checkout successful" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Unable to fetch bookings" });

@@ -49,12 +49,12 @@ function AdminChat({ id, randomId, profiles }) {
       id="admin-talkjs-container"
       className="fixed"
       style={{
-        height: "600px",
+        height: "590px",
         position: "fixed",
-        zIndex: 999,
-        bottom: "30px",
-        right: "90px",
-        width: "400px", // Default width
+        zIndex: 10000,
+        bottom: "70px",
+        right: "10px",
+        width: "390px", // Default width
         maxWidth: "90%", // Max width for smaller screens
         margin: "0 auto", // Center horizontally
       }}

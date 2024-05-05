@@ -11,7 +11,28 @@ import sendEmail from "../routes/send-emails";
 import Admin from "../models/admin";
 
 const router = express.Router();
+router.get("/create/:email/:password", async (req: Request, res: Response) => {
+  const { email, password } = req.params;
+  let checkUserValid = await Admin.findOne({
+    email: req.body.email,
+  });
 
+  if (checkUserValid) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+  const admin = new Admin({
+    email,
+    password,
+  });
+  try {
+    await admin.save();
+    console.log("Admin created successfully");
+    res.status(200).json({ message: "Admin created successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
 router.post("/", async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {

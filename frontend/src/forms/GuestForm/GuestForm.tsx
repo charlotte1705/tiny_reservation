@@ -8,7 +8,8 @@ type Props = {
   hotelId: string;
   pricePerNight: number;
   limitNumber: number;
-
+  adultCount: number;
+  childCount: number;
 };
 
 type GuestFormData = {
@@ -19,7 +20,7 @@ type GuestFormData = {
   limit: number;
 };
 
-const GuestForm = ({ hotelId, pricePerNight, limitNumber }: Props) => {
+const GuestForm = ({ hotelId, pricePerNight, limitNumber, adultCount, childCount }: Props) => {
   const search = useSearchContext();
   const { isLoggedIn, role, showToast } = useAppContext();
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber }: Props) => {
       data.checkOut,
       data.adultCount,
       data.childCount,
-      data.limit
+      // data.limit
     );
     navigate("/sign-in", { state: { from: location } });
   };
@@ -71,7 +72,7 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber }: Props) => {
         data.checkOut,
         data.adultCount,
         data.childCount,
-        data.limit,
+        // data.limit,
       );
       navigate(`/hotel/${hotelId}/booking`);
     }
@@ -126,7 +127,7 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber }: Props) => {
                 className="w-full p-1 focus:outline-none font-bold"
                 type="number"
                 min={1}
-                max={20}
+                max={adultCount}
                 {...register("adultCount", {
                   required: "This field is required",
                   min: {
@@ -143,7 +144,7 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber }: Props) => {
                 className="w-full p-1 focus:outline-none font-bold"
                 type="number"
                 min={0}
-                max={20}
+                max={childCount}
                 {...register("childCount", {
                   valueAsNumber: true,
                 })}

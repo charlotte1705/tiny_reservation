@@ -42,6 +42,12 @@ function App() {
   const [isSidebar, setIsSidebar] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const closeSidebar = () => {
+    setIsSidebar(!isSidebarOpen);
+  };
+
   // Check if current route is login or signup and hide the Sidebar
   useEffect(() => {
     if (location.pathname === "/" || location.pathname === "/signup") {
@@ -57,9 +63,9 @@ function App() {
         <CssBaseline />
         {/* HOME PAGE WITH SIDE BAR */}
         <div className="app">
-          {isSidebar && <Sidebar isSidebar={isSidebar} />}
+          {isSidebar && <Sidebar isSidebar={isSidebar} isOpen={isSidebarOpen} closeSidebar={closeSidebar}/>}
           <main className="content">
-            {isSidebar && <Topbar setIsSidebar={setIsSidebar} />}
+            {isSidebar && <Topbar setIsSidebar={setIsSidebar} toggleSidebar={closeSidebar} />}
             {loading && (
               <div className={classes.loading}>
                 {" "}

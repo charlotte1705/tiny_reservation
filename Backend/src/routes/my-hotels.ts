@@ -268,7 +268,7 @@ router.put(
     try {
       const updatedHotel: HotelType = req.body;
       updatedHotel.lastUpdated = new Date();
-
+      updatedHotel.status = "pending";
       const hotel = await Hotel.findOneAndUpdate(
         {
           _id: req.params.hotelId,

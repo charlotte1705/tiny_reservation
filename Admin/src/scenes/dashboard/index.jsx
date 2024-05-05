@@ -79,8 +79,8 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={hotelData.sale}
-            subtitle="Email Submissions"
+            title={hotelData.sale * 0.05}
+            subtitle="Total Amount"
             progress="1"
             icon={<PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
           />

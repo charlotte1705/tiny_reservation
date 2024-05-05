@@ -217,7 +217,6 @@ export const fetchHistoryBookings = async (): Promise<HotelType[]> => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels/history-bookings`, {
     credentials: "include",
   });
-
   if (!response.ok) {
     throw new Error("Unable to fetch bookings");
   }
@@ -226,11 +225,10 @@ export const fetchHistoryBookings = async (): Promise<HotelType[]> => {
 };
 
 
-export const checkOut = async (): Promise<HotelType[]> => {
-  const response = await fetch(`${API_BASE_URL}/api/my-bookings/checkout`, {
+export const checkOut = async (hotelId: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-bookings/checkout/${hotelId}`, {
     credentials: "include",
   });
-
   if (!response.ok) {
     throw new Error("Unable to fetch bookings");
   }

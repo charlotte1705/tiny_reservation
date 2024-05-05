@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
-import { fetchMyBookings, checkOut } from "../api/api-client";
-// import { useMutation, useQueryClient } from "react-query";
+import { fetchMyBookings } from "../api/api-client";
 
 const MyBookings = () => {
   const { data: hotels } = useQuery(
@@ -12,10 +11,7 @@ const MyBookings = () => {
     return <span>No bookings found</span>;
   }
 
-  //hadble checkout
-  const handleCheckout = (booking) => {
-    console.log(booking._id);
-  }
+
   return (
     <div className="space-y-5">
       <h1 className="text-3xl font-bold">My Bookings</h1>
@@ -50,7 +46,15 @@ const MyBookings = () => {
                     {booking.adultCount} adults, {booking.childCount} children
                   </span>
                 </div>
-                <button onClick={() => handleCheckout(booking)}>Checkout</button>
+                {
+                  new Date() > new Date(booking.checkOut) ? (
+                    <button id={booking._id} disabled className="bg-green-500 text-white py-2 px-4 rounded cursor-not-allowed">Complete</button>
+                  ) : (
+                    <button id={booking._id} disabled className="bg-gray-300 text-gray-600 py-2 px-4 rounded cursor-not-allowed">In progress</button>
+                  )
+                }
+
+
               </div>
             ))}
           </div>

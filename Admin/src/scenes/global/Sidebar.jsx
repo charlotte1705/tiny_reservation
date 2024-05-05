@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -29,17 +29,29 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ closeSidebar }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState('Dashboard');
+  // const isScreenSmall = useMediaQuery('(max-width:480px)');
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  useEffect(() => {
+    if (closeSidebar) {
+      setIsCollapsed(true);
+    }
+  }, [closeSidebar]);
 
   return (
     <Box
       sx={{
         '& .pro-sidebar-inner': {
           background: `${colors.primary[400]} !important`,
+          minHeight: '107vh',
         },
         '& .pro-icon-wrapper': {
           backgroundColor: 'transparent !important',
@@ -59,7 +71,7 @@ const Sidebar = () => {
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={toggleSidebar}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: '10px 0 20px 0',
@@ -76,7 +88,7 @@ const Sidebar = () => {
                 <Typography variant="h3" color={colors.grey[100]}>
                   LUXURY
                 </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                <IconButton onClick={toggleSidebar}>
                   <MenuOutlinedIcon />
                 </IconButton>
               </Box>

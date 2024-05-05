@@ -47,34 +47,34 @@ const Header = () => {
                   <nav className="mainmenu flex">
                     <ul className="flex">
                       <li className={activeLink === '/' ? 'active' : ''}>
-                        <Link to="/" className="no-underline" onClick={() => handleLinkClick('/')}>
+                        <Link to="/" className="no-underline hover:no-underline" onClick={() => handleLinkClick('/')}>
                           Home
                         </Link>
                       </li>
 
 
-                      <li className={`no-underline ${activeLink === '/rooms' ? 'active' : ''}`}>
-                        <Link to="/rooms" className="no-underline underline-none" onClick={() => handleLinkClick('/rooms')}>
-                          Rooms
+                      <li className={activeLink === '/rooms' ? 'active' : ''}>
+                        <Link to="/search" className="no-underline hover:no-underline" onClick={() => handleLinkClick('/rooms')}>
+                          Rooms Search
                         </Link>
                       </li>
                       <li className={activeLink === '/about-us' ? 'active' : ''}>
-                        <Link to="/about-us" className="no-underline" onClick={() => handleLinkClick('/about-us')}>
+                        <Link to="/about-us" className="no-underline hover:no-underline" onClick={() => handleLinkClick('/about-us')}>
                           About Us
                         </Link>
                       </li>
-                      <li className={activeLink === '/pages' ? 'active' : ''}>
-                        <Link to="/pages" className="no-underline" onClick={() => handleLinkClick('/pages')}>
+                      {/* <li className={activeLink === '/pages' ? 'active' : ''}>
+                        <Link to="/pages" className="no-underline hover:no-underline" onClick={() => handleLinkClick('/pages')}>
                           Pages
                           <ul className="dropdown">
                             <li>
-                              <Link to="/room-details" className="no-underline">Room Details</Link>
+                              <Link to="/room-details" className="no-underline hover:no-underline">Room Details</Link>
                             </li>
                           </ul>
                         </Link>
-                      </li>
+                      </li> */}
                       <li className={activeLink === '/contact-us' ? 'active' : ''}>
-                        <Link to="/contact-us" className="no-underline" onClick={() => handleLinkClick('/contact-us')}>
+                        <Link to="/contact-us" className="no-underline hover:no-underline" onClick={() => handleLinkClick('/contact-us')}>
                           Contact
                         </Link>
                       </li>

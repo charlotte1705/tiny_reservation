@@ -253,7 +253,7 @@ const Profile = ({ setLoading }) => {
           height: "50px",
           borderRadius: "100%",
           right: "30px",
-          bottom: "30px",
+          bottom: "10px",
           border: "none",
           cursor: "pointer",
         }}

@@ -201,7 +201,6 @@ router.get(
 
     try {
       const hotel = await Hotel.findById(id);
-      console.log("🚀 ~ hotellll:", hotel)
       if (!hotel) {
         return res.status(404).json({ message: "Hotel not found" });
       }
