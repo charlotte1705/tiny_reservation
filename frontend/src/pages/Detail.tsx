@@ -88,6 +88,8 @@ const Detail = () => {
             pricePerNight={hotel.pricePerNight}
             hotelId={hotel._id}
             limitNumber={hotel.limit}
+            adultCount={hotel.adultCount}
+            childCount={hotel.childCount}
           />
         </div>
       </div>

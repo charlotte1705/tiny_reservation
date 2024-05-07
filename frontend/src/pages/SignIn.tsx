@@ -47,7 +47,8 @@ const SignIn = () => {
       console.log("🚀 ~ handleGoogleLoginSuccess ~ credentialResponse:", credentialResponse)
       await apiClient.signInWithGoogle(credentialResponse.credential);
       // Handle successful login as required (e.g., redirect user)
-      showToast({ message: "Google login Successful!", type: "SUCCESS" });
+      // showToast({ message: "Google login Successful!", type: "SUCCESS" });
+      message.success("Google login Successful!");
       await queryClient.invalidateQueries("validateToken");
       navigate(location.state?.from?.pathname || "/");
     } catch (error) {

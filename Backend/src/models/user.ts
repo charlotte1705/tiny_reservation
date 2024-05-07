@@ -23,12 +23,12 @@ userSchema.pre("save", async function (next) {
     try {
       const hashedPassword = await bcrypt.hash(this.password, 8);
       this.password = hashedPassword;
-      return next(); // Call next() after the hashing operation is completed
+      return next(); 
     } catch (error: any) {
       return next(error as Error); // Pass the error to the next middleware
     }
   }
-  next(); // Call next() if password is not modified or not provided
+  next(); 
 });
 
 

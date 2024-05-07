@@ -61,7 +61,11 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber, adultCount, childCount
   };
 
   const onSubmit = (data: GuestFormData) => {
-    if (limitNumber == 0) {
+    if (!checkIn || !checkOut || checkOut <= checkIn) {
+      showToast({ message: "Please select valid check-in and check-out dates", type: "ERROR" });
+      return;
+    }
+    if (limitNumber === 0) {
       showToast({ message: "No rooms available", type: "ERROR" });
       return;
     }
@@ -75,8 +79,7 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber, adultCount, childCount
         // data.limit,
       );
       navigate(`/hotel/${hotelId}/booking`);
-    }
-    else {
+    } else {
       showToast({ message: "Do not have permission", type: "ERROR" });
     }
   };
@@ -115,7 +118,7 @@ const GuestForm = ({ hotelId, pricePerNight, limitNumber, adultCount, childCount
               endDate={checkOut}
               minDate={minDate}
               maxDate={maxDate}
-              placeholderText="Check-in Date"
+              placeholderText="Check-out Date"
               className="min-w-full bg-white p-2 focus:outline-none"
               wrapperClassName="min-w-full"
             />

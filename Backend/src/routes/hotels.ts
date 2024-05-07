@@ -82,37 +82,45 @@ const router = express.Router();
  *       '500':
  *         description: Internal server error
  */
+// Define a route handler for GET requests to "/search"
 router.get("/search", async (req: Request, res: Response) => {
   try {
+    // Construct the search query based on the request query parameters
     const query = constructSearchQuery(req.query);
-
+    // Initialize an object to hold sorting options
     let sortOptions = {};
+    // Determine sorting options based on the "sortOption" query parameter
     switch (req.query.sortOption) {
       case "starRating":
-        sortOptions = { starRating: -1 };
+        sortOptions = { starRating: -1 }; // Sort by star rating in descending order
         break;
       case "pricePerNightAsc":
-        sortOptions = { pricePerNight: 1 };
+        sortOptions = { pricePerNight: 1 }; // Sort by price per night in ascending order
         break;
       case "pricePerNightDesc":
-        sortOptions = { pricePerNight: -1 };
+        sortOptions = { pricePerNight: -1 }; // Sort by price per night in descending order
         break;
     }
 
-    const pageSize = 5;
+    // Define pagination parameters
+    const pageSize = 5; // Number of items per page
     const pageNumber = parseInt(
-      req.query.page ? req.query.page.toString() : "1"
+      req.query.page ? req.query.page.toString() : "1" // Current page number, default to 1 if not provided
     );
     query.status = "approve";
+    // Calculate the number of documents to skip based on pagination
     const skip = (pageNumber - 1) * pageSize;
 
+    // Query the database to find hotels based on the constructed query, sorted and paginated
     const hotels = await Hotel.find(query)
       .sort(sortOptions)
       .skip(skip)
       .limit(pageSize);
 
+    // Count total number of documents that match the query
     const total = await Hotel.countDocuments(query);
 
+    // Construct the response object with retrieved hotels and pagination information
     const response: HotelSearchResponse = {
       data: hotels,
       pagination: {
@@ -262,16 +270,16 @@ router.post(
   verifyToken,
   async (req: Request, res: Response) => {
     const { numberOfNights } = req.body;
-
+    // Extract numberOfNights and hotelId from the request body and parameters
     const hotelId = req.params.hotelId;
 
     const hotel = await Hotel.findById(hotelId);
     if (!hotel) {
       return res.status(400).json({ message: "Hotel not found" });
     }
-    //total cost
+    //total cost caculate it gives us most up to date price
     const totalCost = hotel.pricePerNight * numberOfNights;
-    //hotel id, user id
+    // Create a payment intent with the total cost
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalCost * 100,
       currency: "gbp",
@@ -335,16 +343,20 @@ router.post(
   verifyToken,
   async (req: Request, res: Response) => {
     try {
+      // Retrieve the payment intent ID from the request body
       const paymentIntentId = req.body.paymentIntentId;
 
+      // Retrieve payment intent details from Stripe using the payment intent ID
       const paymentIntent = await stripe.paymentIntents.retrieve(
         paymentIntentId as string
       );
+
 
       if (!paymentIntent) {
         return res.status(400).json({ message: "payment intent not found" });
       }
 
+      // Check if payment intent matches the hotel and user IDs
       if (
         paymentIntent.metadata.hotelId !== req.params.hotelId ||
         paymentIntent.metadata.userId !== req.userId
@@ -352,21 +364,25 @@ router.post(
         return res.status(400).json({ message: "payment intent mismatch" });
       }
 
+
       if (paymentIntent.status !== "succeeded") {
         return res.status(400).json({
           message: `payment intent not succeeded. Status: ${paymentIntent.status}`,
         });
       }
 
+      // Create a new booking object based on request body and authenticated user ID
       const newBooking: BookingType = {
         ...req.body,
         userId: req.userId,
       };
+
+      // Find the hotel by ID and update it to add the new booking and decrease the booking limit
       const hotel = await Hotel.findOneAndUpdate(
         { _id: req.params.hotelId },
         {
           $push: { bookings: newBooking },
-          $inc: { limit: -1 },
+          $inc: { limit: -1 }, // Decrease booking limit by 1
         }
       );
 
@@ -375,11 +391,11 @@ router.post(
         return res.status(400).json({ message: "hotel not found" });
       }
       await hotel.save();
+      // Create a history record for the new booking
       const history: HistoryType = {
         ...newBooking,
         name: hotel.name,
       };
-
       await History.create(history);
       res.status(200).send();
     } catch (error) {

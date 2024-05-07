@@ -30,7 +30,7 @@ function TalkJSChat() {
       });
 
       const session = new Talk.Session({
-        appId: "tG5wFYEs",
+        appId: "tFW5FDJD",
         me: me,
       });
 

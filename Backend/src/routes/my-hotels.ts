@@ -299,14 +299,17 @@ router.put(
 );
 
 async function uploadImages(imageFiles: Express.Multer.File[]) {
+  // Map each image file to a promise that uploads it to the cloud storage
   const uploadPromises = imageFiles.map(async (image) => {
     const b64 = Buffer.from(image.buffer).toString("base64");
+    // Create a data URI for the image
     let dataURI = "data:" + image.mimetype + ";base64," + b64;
+    // Upload the image to the cloud storage service 
     const res = await cloudinary.v2.uploader.upload(dataURI);
     return res.url;
   });
-
   const imageUrls = await Promise.all(uploadPromises);
+
   return imageUrls;
 }
 
